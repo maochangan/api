@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sshy.api.dao.CompanyUserDao">
+
+
+    <!--商户操作sql-->
+
+
+    <insert id="addCompanyUser" parameterType="com.sshy.api.bean.CompanyUser">
+        insert into c_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cId != null">
+                c_id,
+            </if>
+            <if test="cName != null">
+                c_name,
+            </if>
+            <if test="cUnionidId != null">
+                c_unionid_id,
+            </if>
+            <if test="cInfo != null">
+                c_info,
+            </if>
+            <if test="cPassword != null">
+                c_password,
+            </if>
+            <if test="cCreateData != null">
+                c_create_data,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cId != null">
+                #{cId,jdbcType=INTEGER},
+            </if>
+            <if test="cName != null">
+                #{cName,jdbcType=VARCHAR},
+            </if>
+            <if test="cUnionidId != null">
+                #{cUnionidId,jdbcType=INTEGER},
+            </if>
+            <if test="cInfo != null">
+                #{cInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="cPassword != null">
+                #{cPassword,jdbcType=INTEGER},
+            </if>
+            <if test="cCreateData != null">
+                #{cCreateData,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--ar主题操作sql-->
+
+    <resultMap id="baseMap" type="com.sshy.api.bean.ArThemeManagement">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="ar_theme_name" jdbcType="VARCHAR" property="arThemeName" />
+        <result column="ar_theme_describe" jdbcType="VARCHAR" property="ArThemeDescribe" />
+        <result column="ar_theme_img_url" jdbcType="VARCHAR" property="arThemeImgUrl" />
+        <result column="ar_theme_active" jdbcType="INTEGER" property="arThemeActive" />
+        <result column="ar_theme_start_time" jdbcType="TIMESTAMP" property="arThemeStartTime" />
+        <result column="ar_theme_end_time" jdbcType="TIMESTAMP" property="arThemeEndTime" />
+        <result column="ar_theme_keyword" jdbcType="VARCHAR" property="arThemeKeyword" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="baseMap">
+        select * from ar_theme_management
+    </select>
+
+    <update id="updateArThemeSerByParKey" parameterType="com.sshy.api.bean.ArThemeManagement">
+        UPDATE ar_theme_management
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null != arThemeName">ar_theme_name = #{arThemeName , jdbcType=VARCHAR}</if>
+            <if test="null != arThemeActive">,ar_theme_active = #{arThemeActive , jdbcType=INTEGER}</if>
+            <if test="null != ArThemeDescribe">,ar_theme_describe = #{ArThemeDescribe , jdbcType=VARCHAR}</if>
+            <if test="null != arThemeImgUrl">,ar_theme_img_url = #{arThemeImgUrl , jdbcType=VARCHAR}</if>
+            <if test="null != arThemeStartTime">,ar_theme_start_time = #{arThemeStartTime , jdbcType=TIMESTAMP}</if>
+            <if test="null != arThemeEndTime">,ar_theme_end_time = #{arThemeEndTime , jdbcType=TIMESTAMP}</if>
+            <if test="null != arThemeKeyword">,ar_theme_keyword = #{arThemeKeyword , jdbcType=VARCHAR}</if>
+            <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>
+            <if test="null != arMaterialId">,ar_material_id = #{arMaterialId , jdbcType=INTEGER}</if>
+            where id = #{id , jdbcType=INTEGER}
+        </trim>
+    </update>
+
+    <insert id="addARTheme" parameterType="com.sshy.api.bean.ArThemeManagement">
+        INSERT INTO ar_theme_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="arThemeName != null">
+                ar_theme_name,
+            </if>
+            <if test="arThemeActive != null">
+                ar_theme_active,
+            </if>
+            <if test="ArThemeDescribe != null">
+                ar_theme_describe,
+            </if>
+            <if test="arThemeImgUrl != null">
+                ar_theme_img_url,
+            </if>
+            <if test="arThemeStartTime != null">
+                ar_theme_start_time,
+            </if>
+            <if test="arThemeEndTime != null">
+                ar_theme_end_time,
+            </if>
+            <if test="arThemeKeyword != null">
+                ar_theme_keyword,
+            </if>
+            <if test="cUserId != null">
+                c_user_id,
+            </if>
+            <if test="arMaterialId != null">
+                ar_material_id,
+            </if>
+            <if test="deleteNum != null">
+                delete_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id , jdbcType=INTEGER},
+            </if>
+            <if test="arThemeName != null">
+                #{arThemeName , jdbcType=VARCHAR},
+            </if>
+            <if test="arThemeActive != null">
+                #{arThemeActive , jdbcType=INTEGER},
+            </if>
+            <if test="ArThemeDescribe != null">
+                #{ArThemeDescribe , jdbcType=VARCHAR},
+            </if>
+            <if test="arThemeImgUrl != null">
+                #{arThemeImgUrl , jdbcType=VARCHAR},
+            </if>
+            <if test="arThemeStartTime != null">
+                #{arThemeStartTime , jdbcType=TIMESTAMP},
+            </if>
+            <if test="arThemeEndTime != null">
+                #{arThemeEndTime , jdbcType=TIMESTAMP},
+            </if>
+            <if test="arThemeKeyword != null">
+                #{arThemeKeyword , jdbcType=VARCHAR},
+            </if>
+            <if test="cUserId != null">
+                #{cUserId , jdbcType=INTEGER},
+            </if>
+            <if test="arMaterialId != null">
+                #{arMaterialId , jdbcType=INTEGER},
+            </if>
+            <if test="deleteNum != null">
+                #{deleteNum , jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+
+
+
+</mapper>
