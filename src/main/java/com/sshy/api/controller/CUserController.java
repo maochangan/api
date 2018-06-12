@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -198,16 +199,16 @@ public class CUserController {
 
 
     @RequestMapping(value = "testARReturn", method = RequestMethod.GET)
-    public JsonResult testAR(){
+    public JsonResult testAR(MultipartFile file){
         String cloudKey = "<这里是云图库的Cloud Key>";
         String cloudSecret = "<这里是云图库的Cloud Secret>";
         String cloudUrl = "http://<这里是云图库的Client-end URL>/search";
         WebAR webAR = new WebAR(cloudKey, cloudSecret, cloudUrl);
         try {
+            BASE64Encoder base64Encoder = new BASE64Encoder();
+            String image = base64Encoder.encode(file.getBytes());
             // 图片的base64数据
-            String image = "/9j/4AAQSkZJRgA";
             ResultInfo info = webAR.recognize(image);
-
             if (info.getStatusCode() == 0) {
                 // statusCode为0时，识别到目标，数据在target中
                 System.out.println(info.getResult().getTarget().getTargetId());
