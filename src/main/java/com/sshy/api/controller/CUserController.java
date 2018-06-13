@@ -3,14 +3,21 @@ package com.sshy.api.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sshy.api.bean.ArCharManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import com.sshy.api.service.CUserService;
+import com.sshy.api.utils.ARManaUtil.AddTarget;
+import com.sshy.api.utils.ARManaUtil.GetTarget;
+import com.sshy.api.utils.ARManaUtil.GetTargets;
 import com.sshy.api.utils.ARutils.ResultInfo;
 import com.sshy.api.utils.ARutils.WebAR;
 import com.sshy.api.utils.ConstantInterface;
 import com.sshy.api.utils.JsonResult;
+import okhttp3.*;
 import org.apache.ibatis.annotations.Param;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +28,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
+import javax.imageio.stream.ImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 @CrossOrigin(origins = "*" , maxAge = 3600)
 @RestController
 @RequestMapping(value = "")
@@ -77,7 +92,7 @@ public class CUserController {
      */
     @RequestMapping(value = "getAllARTheme", method = RequestMethod.GET)
     public JsonResult getAllARTheme(Integer pn , Integer ps){
-        PageHelper.startPage(pn, ps);
+        PageHelper.startPage(1, 10);
         List<ArThemeManagement> list = cUserService.getAllARTheme();
         if(null == list){
             return JsonResult.fail().add("msg", ConstantInterface.NO_DATA_MESSAGE);
@@ -198,29 +213,61 @@ public class CUserController {
     }
 
 
-    @RequestMapping(value = "testARReturn", method = RequestMethod.GET)
-    public JsonResult testAR(MultipartFile file){
-        String cloudKey = "<这里是云图库的Cloud Key>";
-        String cloudSecret = "<这里是云图库的Cloud Secret>";
-        String cloudUrl = "http://<这里是云图库的Client-end URL>/search";
-        WebAR webAR = new WebAR(cloudKey, cloudSecret, cloudUrl);
+    /**
+     * 获取识别图列表
+     */
+    @RequestMapping(value = "getARTargets", method = RequestMethod.GET)
+    public JsonResult getImages() {
+        Map result = null;
         try {
-            BASE64Encoder base64Encoder = new BASE64Encoder();
-            String image = base64Encoder.encode(file.getBytes());
-            // 图片的base64数据
-            ResultInfo info = webAR.recognize(image);
-            if (info.getStatusCode() == 0) {
-                // statusCode为0时，识别到目标，数据在target中
-                System.out.println(info.getResult().getTarget().getTargetId());
-            } else {
-                // 未识别到目标
-                System.out.println(info.getStatusCode());
-                System.out.println(info.getResult().getMessage());
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+            result = GetTargets.getTargets();
+            return JsonResult.success().add("result" , result);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return JsonResult.fail().add("err", "err");
         }
-        return null;
+    }
+
+    /**
+     * 添加识别图
+     */
+    @RequestMapping(value = "addARTarget", method = RequestMethod.POST)
+    public JsonResult addARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name, @Param("type") String type,
+                                  @Param("size") String size, HttpServletRequest request) {
+        logger.info("检擦参数完整性");
+        if (null == model.getOriginalFilename() || null == image.getOriginalFilename()) {
+            return JsonResult.fail().add("msg", ConstantInterface.DATA_UPLOAD_ERR);
+        }
+        try {
+            String path = ConstantInterface.FILE_BASE_PATH + "cName/" + "ARTargetModel/";
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            String finalPath = path + model.getOriginalFilename();
+            File finalDir = new File(finalPath);
+            model.transferTo(finalDir);
+            String serverPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
+                    request.getServletContext().getContextPath() + "/cName" + "/ARTargetModel/" +
+                    model.getOriginalFilename();
+            Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),type , name , size , serverPath);
+            if((Integer) result.get("statusCode") == 0){
+                Map target = (Map) result.get("result");
+                String targetId = (String) target.get("targetId");
+                ArCharManagement arCharManagement = new ArCharManagement();
+                arCharManagement.setDeleteNum(1);
+                arCharManagement.setArChartImageId(targetId);
+                arCharManagement.setArChartModelUrl(serverPath);
+                boolean state = cUserService.addARChart(arCharManagement);
+                if (state) {
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }
+            }
+            return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return JsonResult.fail().add("err", "err");
+        }
     }
 
 
@@ -228,6 +275,79 @@ public class CUserController {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 识别图添加包含模型
+     * 作废(TODO)
+     */
+    @RequestMapping(value = "addARModel", method = RequestMethod.POST)
+    public JsonResult testAR(@Param("image") MultipartFile image , @Param("model") MultipartFile model , HttpServletRequest request){
+        String cloudKey = "ee9b273d2deddfd932ddca3db269ad0c";
+        String cloudSecret = "j2qQBZaiZAt3hdDHEMMdzOXIy2mIGOrofIWo8HO1ZdSi0XrQ0lx9E9ntgBfTeBdmGyltt7bg8hbRW0rhwtq4yK9WEFJFiL2xB3lyZMr35BCI6DtWMvvrYLOPMV01d9E9";
+        String cloudUrl = "http://ea3a961d7d77b977059d064111d9c1b0.cn1.crs.easyar.com:8080/search";
+        WebAR webAR = new WebAR(cloudKey, cloudSecret, cloudUrl);
+        try {
+            Base64.Encoder encoder = Base64.getEncoder();
+            String imageBase64 = encoder.encodeToString(image.getBytes());
+            ResultInfo info = webAR.recognize(imageBase64);
+            if (info.getStatusCode() == 0/* && model.getOriginalFilename() != null*/) {
+                logger.info("识别到目标"+info.getResult().getTarget().getTargetId());
+                String imagePath = ConstantInterface.FILE_BASE_PATH + "cName/" + "ArChartDir/img/";
+                File dir = new File(imagePath);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                String finalPath = imagePath + image.getOriginalFilename();
+                File finalDir = new File(finalPath);
+                image.transferTo(finalDir);
+                String imgServerPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
+                        request.getServletContext().getContextPath() + "/cName" + "/ArChartDir/img/" +
+                        image.getOriginalFilename();
+
+                String modelPath = ConstantInterface.FILE_BASE_PATH + "cName/" + "ArChartDir/model/";
+                File mdir = new File(modelPath);
+                if (!mdir.exists()) {
+                    mdir.mkdirs();
+                }
+                String mfinalPath = modelPath + model.getOriginalFilename();
+                File mfinalDir = new File(mfinalPath);
+                image.transferTo(mfinalDir);
+                String modelServerPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
+                        request.getServletContext().getContextPath() + "/cName" + "/ArChartDir/model/" +
+                        model.getOriginalFilename();
+                ArCharManagement arCharManagement = new ArCharManagement();
+                arCharManagement.setArChartCreateTime(new Timestamp(new Date().getTime()));
+                arCharManagement.setArChartImageId(info.getResult().getTarget().getTargetId());
+                arCharManagement.setArChartImageUrl(imgServerPath);
+                arCharManagement.setArChartModelUrl(modelServerPath);
+                arCharManagement.setDeleteNum(1);
+                boolean state = cUserService.addARChart(arCharManagement);
+                if (state) {
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }else{
+                    return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+                }
+            } else {
+                logger.info("未识别到目标");
+                return JsonResult.fail().add("msg", ConstantInterface.NO_MATCHION);
+            }
+        } catch (IOException e) {
+            return JsonResult.fail().add("err", "err");
+        }
+    }
 
 
 

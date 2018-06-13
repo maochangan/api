@@ -1,5 +1,6 @@
 package com.sshy.api.dao;
 
+import com.sshy.api.bean.ArCharManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import org.apache.ibatis.annotations.*;
@@ -42,5 +43,19 @@ public interface CompanyUserDao {
 
     @Update("UPDATE ar_theme_management SET delete_num = 0 WHERE id = #{id , jdbcType=INTEGER}")
     Integer deleteARThemeById(Integer id);
+
+
+    //识别图管理接口方法
+    @Insert("INSERT INTO ar_chart_management(ar_chart_image_url , ar_chart_image_id , ar_chart_model_url , c_user_id , ar_chart_create_time , delete_num)" +
+            "VALUES(#{arChartImageUrl , jdbcType=VARCHAR},#{arChartImageId , jdbcType=INTEGER},#{arChartModelUrl , jdbcType=VARCHAR},#{cUserId , jdbcType=INTEGER },#{arChartCreateTime , jdbcType=TIMESTAMP} , #{deleteNum})")
+    Integer addARChart(ArCharManagement arCharManagement);
+
+    @Select("SELECT * FROM ar_chart_management WHERE delete_num=1")
+    List<ArCharManagement> getAllARChart();
+
+    Integer updateARChartSerByParKry(ArCharManagement arCharManagement);
+
+
+
 
 }

@@ -38,17 +38,14 @@ public class WebAR {
         params.put("date", this.getUtcDate());
         params.put("appKey", this.cloudKey);
         params.put("signature", this.getSign(params));
-
         ObjectMapper mapper = new ObjectMapper();
         String str = mapper.writeValueAsString(params);
-
         return mapper.readValue(this.send(str), ResultInfo.class);
     }
 
     private String getSign(SortedMap<String, String> params) {
         StringBuilder builder = new StringBuilder();
         params.forEach((key, value) -> builder.append(key + value));
-
         return this.sha1(builder.toString() + this.cloudSecret);
     }
 

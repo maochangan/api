@@ -1,5 +1,6 @@
 package com.sshy.api.service;
 
+import com.sshy.api.bean.ArCharManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 
@@ -22,4 +23,8 @@ public interface CUserService {
     boolean addARTheme(ArThemeManagement arThemeManagement);
 
     ArThemeManagement getARThemeById(Integer id);
+
+    boolean addARChart(ArCharManagement arCharManagement);
+
+    List<ArCharManagement> getAllARChart();
 }

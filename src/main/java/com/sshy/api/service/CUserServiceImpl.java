@@ -1,5 +1,6 @@
 package com.sshy.api.service;
 
+import com.sshy.api.bean.ArCharManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import com.sshy.api.dao.CompanyUserDao;
@@ -80,4 +81,21 @@ public class CUserServiceImpl implements CUserService {
             return arThemeManagement;
         }
     }
+
+    @Override
+    public boolean addARChart(ArCharManagement arCharManagement) {
+        Integer state = companyUserDao.addARChart(arCharManagement);
+        return 0 != state;
+    }
+
+    @Override
+    public List<ArCharManagement> getAllARChart() {
+        List<ArCharManagement> list = companyUserDao.getAllARChart();
+        if (list.size() == ConstantInterface.NO_DATA_INSERT_NUM) {
+            return null;
+        }else{
+            return list;
+        }
+    }
+
 }

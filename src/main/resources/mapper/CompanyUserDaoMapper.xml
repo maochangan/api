@@ -169,6 +169,21 @@
     </insert>
 
 
+    <update id="updateARChartSerByParKry" parameterType="com.sshy.api.bean.ArCharManagement">
+        UPDATE ar_chart_management
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null != arChartImageUrl">ar_chart_image_url = #{arChartImageUrl , jdbcType=VARCHAR}</if>
+            <if test="null != arChartImageId">,ar_chart_image_id = #{arChartImageId , jdbcType=INTEGER}</if>
+            <if test="null != arChartModelUrl">,ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR}</if>
+            <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>
+            <if test="null != arChartCreateTime">,ar_chart_create_time = #{arChartCreateTime , jdbcType=TIMESTAMP}</if>
+            <if test="null != deleteNum">,delete_num = #{deleteNum , jdbcType=TIMESTAMP}</if>
+            where id = #{id , jdbcType=INTEGER}
+        </trim>
+    </update>
+
+
+
 
 
 
