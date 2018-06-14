@@ -1,12 +1,8 @@
 package com.sshy.api.service;
 
-import com.sshy.api.bean.ArCharManagement;
-import com.sshy.api.bean.ArModelManagement;
-import com.sshy.api.bean.ArThemeManagement;
-import com.sshy.api.bean.CompanyUser;
+import com.sshy.api.bean.*;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CUserService {
 
@@ -30,9 +26,19 @@ public interface CUserService {
 
     List<ArCharManagement> getAllARChart();
 
-    boolean updateARTarget(String serverPath, String targetId);
+    boolean updateARTarget(ArCharManagement arCharManagement);
 
     void removeTarget(String targetId);
 
     boolean addARModel(ArModelManagement arModelManagement);
+
+    List<ArModelManagement> getARModelList();
+
+    ArModelManagement getARModel(Integer id);
+
+    boolean removeARModel(Integer id);
+
+    boolean updateARModel(ArModelManagement arModel);
+
+    ArCharManagement getARChartByTargetId(String targetId);
 }

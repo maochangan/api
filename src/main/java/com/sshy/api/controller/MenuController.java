@@ -1,9 +1,11 @@
 package com.sshy.api.controller;
 
 
+import com.sshy.api.service.CUserService;
 import com.sshy.api.utils.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +22,10 @@ import java.util.Map;
 public class MenuController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private CUserService cUserService;
+
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Map getMenu(){

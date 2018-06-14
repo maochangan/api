@@ -1,9 +1,6 @@
 package com.sshy.api.dao;
 
-import com.sshy.api.bean.ArCharManagement;
-import com.sshy.api.bean.ArModelManagement;
-import com.sshy.api.bean.ArThemeManagement;
-import com.sshy.api.bean.CompanyUser;
+import com.sshy.api.bean.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -58,8 +55,7 @@ public interface CompanyUserDao {
     @Select("SELECT * FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     ArCharManagement getARTargetByImageId(String targetId);
 
-    @Update("UPDATE ar_chart_management SET ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR} WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
-    Integer updateARTarget(@Param("arChartModelUrl") String arChartModelUrl ,@Param("arChartImageId") String arChartImageId);
+    Integer updateARTarget(ArCharManagement arCharManagement);
 
     @Delete("DELETE FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     Integer removeTarget(String targetId);
@@ -67,4 +63,17 @@ public interface CompanyUserDao {
 
     //展示内容管理
     Integer addARModel(ArModelManagement arModelManagement);
+
+    List<ArModelManagement> getARModleList();
+
+    ArModelManagement getARModel(Integer id);
+
+    @Update("UPDATE ar_model_management SET delete_num=0 WHERE id = #{id , jdbcType=INTEGER}")
+    Integer removeARModel(Integer id);
+
+    Integer updateArModelSerByParKey(ArModelManagement arModelManagement);
+
+
+
+
 }

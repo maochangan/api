@@ -83,7 +83,7 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="null != arThemeName">ar_theme_name = #{arThemeName , jdbcType=VARCHAR}</if>
             <if test="null != arThemeActive">,ar_theme_active = #{arThemeActive , jdbcType=INTEGER}</if>
-            <if test="null != ArThemeDescribe">,ar_theme_describe = #{ArThemeDescribe , jdbcType=VARCHAR}</if>
+            <if test="null != arThemeDescribe">,ar_theme_describe = #{arThemeDescribe , jdbcType=VARCHAR}</if>
             <if test="null != arThemeImgUrl">,ar_theme_img_url = #{arThemeImgUrl , jdbcType=VARCHAR}</if>
             <if test="null != arThemeStartTime">,ar_theme_start_time = #{arThemeStartTime , jdbcType=TIMESTAMP}</if>
             <if test="null != arThemeEndTime">,ar_theme_end_time = #{arThemeEndTime , jdbcType=TIMESTAMP}</if>
@@ -202,7 +202,20 @@
 
 
 
-    <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement">
+
+
+    <!--展示内容管理-->
+
+    <resultMap id="arModelBase" type="com.sshy.api.bean.ArModelManagement">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="ar_model_url" jdbcType="VARCHAR" property="arModelUrl" />
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
+        <result column="ar_model_create_time" jdbcType="TIMESTAMP" property="arModelCreateTime" />
+        <result column="ar_model_name" jdbcType="VARCHAR" property="arModelName" />
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
+    </resultMap>
+
+    <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement" useGeneratedKeys="true" keyProperty="id">
         insert into ar_model_management
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -247,7 +260,25 @@
     </insert>
 
 
+    <select id="getARModleList" resultMap="arModelBase">
+        select * from ar_model_management
+    </select>
 
+    <select id="getARModel" resultMap="arModelBase">
+        select * from ar_model_management where id = #{id , jdbcType=INTEGER}
+    </select>
+
+    <update id="updateArModelSerByParKey" parameterType="com.sshy.api.bean.ArModelManagement">
+        UPDATE ar_theme_management
+        <trim prefix="set" suffixOverrides=",">
+            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=VARCHAR}</if>
+            <if test="null != arModelName">,ar_model_name = #{arModelName , jdbcType=INTEGER}</if>
+            <if test="null != arModelUrl">,ar_model_url = #{arModelUrl , jdbcType=VARCHAR}</if>
+            <if test="null != arModelCreateTime">,ar_model_create_time = #{arModelCreateTime , jdbcType=TIMESTAMP}</if>
+            <if test="null != deleteNum">,delete_num = #{deleteNum , jdbcType=INTEGER}</if>
+            where id = #{id , jdbcType=INTEGER}
+        </trim>
+    </update>
 
 
 

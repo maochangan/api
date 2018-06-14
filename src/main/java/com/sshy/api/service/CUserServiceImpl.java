@@ -1,9 +1,6 @@
 package com.sshy.api.service;
 
-import com.sshy.api.bean.ArCharManagement;
-import com.sshy.api.bean.ArModelManagement;
-import com.sshy.api.bean.ArThemeManagement;
-import com.sshy.api.bean.CompanyUser;
+import com.sshy.api.bean.*;
 import com.sshy.api.dao.CompanyUserDao;
 import com.sshy.api.utils.ConstantInterface;
 import org.slf4j.Logger;
@@ -100,8 +97,8 @@ public class CUserServiceImpl implements CUserService {
     }
 
     @Override
-    public boolean updateARTarget(String serverPath, String targetId) {
-        Integer result = companyUserDao.updateARTarget(serverPath, targetId);
+    public boolean updateARTarget(ArCharManagement arCharManagement) {
+        Integer result = companyUserDao.updateARTarget(arCharManagement);
         return result != 0;
     }
 
@@ -116,5 +113,40 @@ public class CUserServiceImpl implements CUserService {
         Integer result = companyUserDao.addARModel(arModelManagement);
         return result !=0 ;
     }
+
+    @Override
+    public List<ArModelManagement> getARModelList() {
+        List<ArModelManagement> result = companyUserDao.getARModleList();
+        if(0 == result.size()){
+            return null;
+        }else{
+            return result;
+        }
+    }
+
+    @Override
+    public ArModelManagement getARModel(Integer id) {
+        ArModelManagement arModelManagement = companyUserDao.getARModel(id);
+        return arModelManagement;
+    }
+
+    @Override
+    public boolean removeARModel(Integer id) {
+        Integer result = companyUserDao.removeARModel(id);
+        return result != 0;
+    }
+
+    @Override
+    public boolean updateARModel(ArModelManagement arModel) {
+        Integer result = companyUserDao.updateArModelSerByParKey(arModel);
+        return result != 0;
+    }
+
+    @Override
+    public ArCharManagement getARChartByTargetId(String targetId) {
+        ArCharManagement arCharManagement = companyUserDao.getARTargetByImageId(targetId);
+        return arCharManagement;
+    }
+
 
 }
