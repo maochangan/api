@@ -41,4 +41,8 @@ public interface CUserService {
     boolean updateARModel(ArModelManagement arModel);
 
     ArCharManagement getARChartByTargetId(String targetId);
+
+    boolean deleteARThemeById(Integer id);
+
+    Integer getCountImageNum(Integer id);
 }

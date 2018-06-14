@@ -148,5 +148,17 @@ public class CUserServiceImpl implements CUserService {
         return arCharManagement;
     }
 
+    @Override
+    public boolean deleteARThemeById(Integer id) {
+        Integer result = companyUserDao.deleteARThemeById(id);
+        return result != 0;
+    }
+
+    @Override
+    public Integer getCountImageNum(Integer id) {
+        Integer num = companyUserDao.getCountImageNum(id);
+        return num;
+    }
+
 
 }

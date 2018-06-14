@@ -16,6 +16,26 @@ public class ArCharManagement {
 
     private Integer deleteNum;
 
+    private Integer arThemeId;
+
+    private String outUrl;
+
+    public Integer getArThemeId() {
+        return arThemeId;
+    }
+
+    public void setArThemeId(Integer arThemeId) {
+        this.arThemeId = arThemeId;
+    }
+
+    public String getOutUrl() {
+        return outUrl;
+    }
+
+    public void setOutUrl(String outUrl) {
+        this.outUrl = outUrl;
+    }
+
     public Integer getArModelId() {
         return arModelId;
     }

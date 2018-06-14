@@ -90,9 +90,9 @@ public class CUserController {
      * @return pageInfo
      */
     @RequestMapping(value = "getAllARTheme", method = RequestMethod.GET)
-    public JsonResult getAllARTheme(Integer pn , Integer ps){
-        PageHelper.startPage(1, 10);
-        List<ArThemeManagement> list = cUserService.getAllARTheme();
+    public JsonResult getAllARTheme(@Param("pn") Integer pn , @Param("ps") Integer ps){
+        PageHelper.startPage(pn, ps);
+        List<ArThemeManagement> list = cUserService.getAllARTheme();//TODO 数据库做对应查询
         if(null == list){
             return JsonResult.fail().add("msg", ConstantInterface.NO_DATA_MESSAGE);
         }
@@ -194,20 +194,14 @@ public class CUserController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "deleteARTheme", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteARTheme", method = RequestMethod.POST)
     public JsonResult deleteARTheme(Integer id) {
         logger.info("主题删除");
-        ArThemeManagement arThemeManagement = cUserService.getARThemeById(id);
-        if (null == arThemeManagement) {
-            return JsonResult.fail().add("msg", ConstantInterface.NO_DATA_MESSAGE);
+        boolean state = cUserService.deleteARThemeById(id);
+        if (state) {
+            return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
         }else{
-            arThemeManagement.setDeleteNum(0);
-            boolean state = cUserService.updateArTheme(arThemeManagement);
-            if (state) {
-                return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
-            }else{
-                return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
-            }
+            return JsonResult.fail().add("msg", ConstantInterface.NO_DATA_MESSAGE);
         }
     }
 
@@ -228,9 +222,15 @@ public class CUserController {
                 Iterator<ArCharManagement> integer = list.iterator();
                 Map result = new TreeMap();
                 while (integer.hasNext()) {
+                    Map item = new HashMap();
                     Map target = GetTarget.getTarget(integer.next().getArChartImageId());
+                    ArModelManagement arModelManagement = cUserService.getARModel(integer.next().getArModelId());
+                    ArThemeManagement arThemeManagement = cUserService.getARThemeById(integer.next().getArThemeId());
                     if((Integer) target.get("statusCode") == 0){
-                        result.put("target", target);
+                        item.put("target", target);
+                        item.put("arModel", arModelManagement);
+                        item.put("atTheme", arThemeManagement);
+                        result.put("value", item);
                     }
                     continue;
                 }
@@ -247,22 +247,23 @@ public class CUserController {
      * 添加识别图
      */
     @RequestMapping(value = "addARTarget", method = RequestMethod.POST)
-    public JsonResult addARTarget(@Param("image")MultipartFile image , @Param("name") String name,@Param("modelName") String modelName ,
-                                  @Param("size") String size) {
+    public JsonResult addARTarget(@Param("image")MultipartFile image , @Param("name") String name,@Param("size") String size) {
         logger.info("检查参数完整性");
         if (null == image.getOriginalFilename()) {
             return JsonResult.fail().add("msg", ConstantInterface.DATA_UPLOAD_ERR);
         }
         try {
-            Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),name , size , "默认模型");
+            String modelUrl = cUserService.getARModel(1).getArModelUrl();//默认模型
+            Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),name , size , modelUrl);
             if((Integer) result.get("statusCode") == 0){
                 logger.info("success");
                 Map target = (Map) result.get("result");
                 String targetId = (String) target.get("targetId");
                 ArCharManagement arCharManagement = new ArCharManagement();
-                arCharManagement.setDeleteNum(1);
+                arCharManagement.setDeleteNum(0);
                 arCharManagement.setArChartImageId(targetId);
-                arCharManagement.setArModelId(0);//默认模型id
+                arCharManagement.setArModelId(1);//默认模型id
+                arCharManagement.setArThemeId(1);//默认主题id
                 arCharManagement.setArChartCreateTime(new Timestamp(new Date().getTime()));
                 boolean state = cUserService.addARChart(arCharManagement);
                 if (state) {
@@ -304,7 +305,7 @@ public class CUserController {
      */
     @RequestMapping(value = "updateARTarget", method = RequestMethod.POST)
     public JsonResult updateARTarget(@Param("image")MultipartFile image , @Param("name") String name,
-                                  @Param("size") String size, @Param("active") String active , @Param("targetId") String targetId , @Param("modelId") Integer modelId) {
+                                  @Param("size") String size, @Param("active") String active , @Param("targetId") String targetId , @Param("modelId") Integer modelId , @Param("themeId") Integer themeId) {
         logger.info("检查参数完整性");
         try {
             if(null == modelId){
@@ -417,6 +418,11 @@ public class CUserController {
         if(null == list){
             return JsonResult.fail().add("msg", ConstantInterface.NO_DATA_MESSAGE);
         }else {
+            Iterator<ArModelManagement> i = list.iterator();
+            while (i.hasNext()) {
+                Integer num = cUserService.getCountImageNum(i.next().getId());
+                i.next().setTestSetting(num);
+            }
             PageInfo<ArModelManagement> pageInfo = new PageInfo<>(list);
             return JsonResult.success().add("pageInfo", pageInfo);
         }
@@ -524,3 +530,6 @@ public class CUserController {
 
 
 }
+
+
+

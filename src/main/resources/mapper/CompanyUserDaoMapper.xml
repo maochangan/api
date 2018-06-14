@@ -72,26 +72,28 @@
         <result column="ar_theme_start_time" jdbcType="TIMESTAMP" property="arThemeStartTime" />
         <result column="ar_theme_end_time" jdbcType="TIMESTAMP" property="arThemeEndTime" />
         <result column="ar_theme_keyword" jdbcType="VARCHAR" property="arThemeKeyword" />
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
     </resultMap>
 
     <select id="selectAll" resultMap="baseMap">
-        select * from ar_theme_management
+        select * from ar_theme_management where delete_num = 0
     </select>
 
     <update id="updateArThemeSerByParKey" parameterType="com.sshy.api.bean.ArThemeManagement">
         UPDATE ar_theme_management
-        <trim prefix="set" suffixOverrides=",">
-            <if test="null != arThemeName">ar_theme_name = #{arThemeName , jdbcType=VARCHAR}</if>
-            <if test="null != arThemeActive">,ar_theme_active = #{arThemeActive , jdbcType=INTEGER}</if>
-            <if test="null != arThemeDescribe">,ar_theme_describe = #{arThemeDescribe , jdbcType=VARCHAR}</if>
-            <if test="null != arThemeImgUrl">,ar_theme_img_url = #{arThemeImgUrl , jdbcType=VARCHAR}</if>
-            <if test="null != arThemeStartTime">,ar_theme_start_time = #{arThemeStartTime , jdbcType=TIMESTAMP}</if>
-            <if test="null != arThemeEndTime">,ar_theme_end_time = #{arThemeEndTime , jdbcType=TIMESTAMP}</if>
-            <if test="null != arThemeKeyword">,ar_theme_keyword = #{arThemeKeyword , jdbcType=VARCHAR}</if>
-            <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>
-            <if test="null != arMaterialId">,ar_material_id = #{arMaterialId , jdbcType=INTEGER}</if>
-            where id = #{id , jdbcType=INTEGER}
-        </trim>
+        <set>
+            <if test="null != arThemeName">ar_theme_name = #{arThemeName , jdbcType=VARCHAR},</if>
+            <if test="null != arThemeActive">ar_theme_active = #{arThemeActive , jdbcType=INTEGER},</if>
+            <if test="null != arThemeDescribe">ar_theme_describe = #{arThemeDescribe , jdbcType=VARCHAR},</if>
+            <if test="null != arThemeImgUrl">ar_theme_img_url = #{arThemeImgUrl , jdbcType=VARCHAR},</if>
+            <if test="null != arThemeStartTime">ar_theme_start_time = #{arThemeStartTime , jdbcType=TIMESTAMP},</if>
+            <if test="null != arThemeEndTime">ar_theme_end_time = #{arThemeEndTime , jdbcType=TIMESTAMP},</if>
+            <if test="null != arThemeKeyword">ar_theme_keyword = #{arThemeKeyword , jdbcType=VARCHAR},</if>
+            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=INTEGER},</if>
+            <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=INTEGER},</if>
+        </set>
+        where id = #{id , jdbcType=INTEGER}
     </update>
 
     <insert id="addARTheme" parameterType="com.sshy.api.bean.ArThemeManagement">
@@ -123,9 +125,6 @@
             </if>
             <if test="cUserId != null">
                 c_user_id,
-            </if>
-            <if test="arMaterialId != null">
-                ar_material_id,
             </if>
             <if test="deleteNum != null">
                 delete_num,
@@ -159,9 +158,6 @@
             <if test="cUserId != null">
                 #{cUserId , jdbcType=INTEGER},
             </if>
-            <if test="arMaterialId != null">
-                #{arMaterialId , jdbcType=INTEGER},
-            </if>
             <if test="deleteNum != null">
                 #{deleteNum , jdbcType=INTEGER},
             </if>
@@ -177,6 +173,8 @@
         <result column="ar_chart_create_time" jdbcType="TIMESTAMP" property="arChartCreateTime" />
         <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
         <result column="ar_model_id" jdbcType="INTEGER" property="arModelId" />
+        <result column="out_url" jdbcType="VARCHAR" property="outUrl"/>
+        <result column="ar_theme_id" jdbcType="INTEGER" property="arThemeId"/>
     </resultMap>
 
 
@@ -187,14 +185,16 @@
 
     <update id="updateARChartSerByParKry" parameterType="com.sshy.api.bean.ArCharManagement">
         UPDATE ar_chart_management
-        <trim prefix="set" suffixOverrides=",">
-            <if test="null != arChartImageId">,ar_chart_image_id = #{arChartImageId , jdbcType=INTEGER}</if>
-            <if test="null != arModelId">,ar_model_id = #{arModelId , jdbcType=INTEGER}</if>
-            <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>
-            <if test="null != arChartCreateTime">,ar_chart_create_time = #{arChartCreateTime , jdbcType=TIMESTAMP}</if>
-            <if test="null != deleteNum">,delete_num = #{deleteNum , jdbcType=TIMESTAMP}</if>
-            where id = #{id , jdbcType=INTEGER}
-        </trim>
+        <set>
+            <if test="null != arChartImageId">ar_chart_image_id = #{arChartImageId , jdbcType=INTEGER},</if>
+            <if test="null != arModelId">ar_model_id = #{arModelId , jdbcType=INTEGER},</if>
+            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=INTEGER},</if>
+            <if test="null != arChartCreateTime">ar_chart_create_time = #{arChartCreateTime , jdbcType=TIMESTAMP},</if>
+            <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=TIMESTAMP},</if>
+            <if test="null != arThemeId">ar_theme_id = #{arThemeId , jdbcType=INTEGER},</if>
+            <if test="null != outUrl">out_url = #{outUrl , jdbcType=VARCHAR},</if>
+        </set>
+        where id = #{id , jdbcType=INTEGER}
     </update>
 
 
@@ -213,6 +213,10 @@
         <result column="ar_model_create_time" jdbcType="TIMESTAMP" property="arModelCreateTime" />
         <result column="ar_model_name" jdbcType="VARCHAR" property="arModelName" />
         <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
+        <result column="ar_model_type" jdbcType="VARCHAR" property="arModelType" />
+        <result column="ar_model_active" jdbcType="INTEGER" property="arModelActive" />
+        <result column="out_url" jdbcType="VARCHAR" property="outUrl" />
+        <result column="test_setting" jdbcType="INTEGER" property="testSetting" />
     </resultMap>
 
     <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement" useGeneratedKeys="true" keyProperty="id">
@@ -236,6 +240,18 @@
             <if test="deleteNum != null">
                 delete_num,
             </if>
+            <if test="arModelType != null">
+                ar_model_type,
+            </if>
+            <if test="arModelActive != null">
+                ar_model_active,
+            </if>
+            <if test="outUrl != null">
+                out_url,
+            </if>
+            <if test="testSetting != null">
+                test_setting,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -256,6 +272,18 @@
             <if test="deleteNum != null">
                 #{deleteNum , jdbcType=INTEGER},
             </if>
+            <if test="arModelType != null">
+                #{arModelType , jdbcType=VARCHAR},
+            </if>
+            <if test="arModelActive != null">
+                #{arModelActive , jdbcType=INTEGER},
+            </if>
+            <if test="outUrl != null">
+                #{outUrl , jdbcType=VARCHAR},
+            </if>
+            <if test="testSetting != null">
+                #{testSetting , jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
 
@@ -270,14 +298,18 @@
 
     <update id="updateArModelSerByParKey" parameterType="com.sshy.api.bean.ArModelManagement">
         UPDATE ar_theme_management
-        <trim prefix="set" suffixOverrides=",">
-            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=VARCHAR}</if>
-            <if test="null != arModelName">,ar_model_name = #{arModelName , jdbcType=INTEGER}</if>
-            <if test="null != arModelUrl">,ar_model_url = #{arModelUrl , jdbcType=VARCHAR}</if>
-            <if test="null != arModelCreateTime">,ar_model_create_time = #{arModelCreateTime , jdbcType=TIMESTAMP}</if>
-            <if test="null != deleteNum">,delete_num = #{deleteNum , jdbcType=INTEGER}</if>
-            where id = #{id , jdbcType=INTEGER}
-        </trim>
+        <set>
+            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=VARCHAR},</if>
+            <if test="null != arModelName">ar_model_name = #{arModelName , jdbcType=INTEGER},</if>
+            <if test="null != arModelUrl">ar_model_url = #{arModelUrl , jdbcType=VARCHAR},</if>
+            <if test="null != arModelCreateTime">ar_model_create_time = #{arModelCreateTime , jdbcType=TIMESTAMP},</if>
+            <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=INTEGER},</if>
+            <if test="null != arModelType">ar_model_type = #{arModelType , jdbcType=VARCHAR},</if>
+            <if test="null != arModelActive">ar_model_active = #{arModelActive , jdbcType=INTEGER},</if>
+            <if test="null != testSetting">test_setting = #{testSetting , jdbcType=INTEGER},</if>
+            <if test="null != outUrl">out_url = #{outUrl , jdbcType=VARCHAR},</if>
+        </set>
+        where id = #{id , jdbcType=INTEGER}
     </update>
 
 

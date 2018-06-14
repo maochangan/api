@@ -39,7 +39,7 @@ public interface CompanyUserDao {
     @Select("SELECT * FROM ar_theme_management WHERE id = #{id , jdbcType=INTEGER}")
     ArThemeManagement getARThemeById(Integer id);
 
-    @Update("UPDATE ar_theme_management SET delete_num = 0 WHERE id = #{id , jdbcType=INTEGER}")
+    @Update("UPDATE ar_theme_management SET delete_num = 1 WHERE id = #{id , jdbcType=INTEGER}")
     Integer deleteARThemeById(Integer id);
 
 
@@ -55,6 +55,7 @@ public interface CompanyUserDao {
     @Select("SELECT * FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     ArCharManagement getARTargetByImageId(String targetId);
 
+    @Update("UPDATE ar_chart_management SET ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR} WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     Integer updateARTarget(ArCharManagement arCharManagement);
 
     @Delete("DELETE FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
@@ -73,7 +74,6 @@ public interface CompanyUserDao {
 
     Integer updateArModelSerByParKey(ArModelManagement arModelManagement);
 
-
-
-
+    @Select("SELECT count(*) FROM ar_chart_management WHERE ar_model_id = #{id , jdbcType=INTEGER}")
+    Integer getCountImageNum(Integer id);
 }

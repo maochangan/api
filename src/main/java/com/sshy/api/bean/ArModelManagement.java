@@ -16,6 +16,46 @@ public class ArModelManagement {
 
     private Integer deleteNum;
 
+    private String arModelType;
+
+    private Integer arModelActive;
+
+    private String outUrl;
+
+    private Integer testSetting;
+
+    public String getArModelType() {
+        return arModelType;
+    }
+
+    public void setArModelType(String arModelType) {
+        this.arModelType = arModelType;
+    }
+
+    public Integer getArModelActive() {
+        return arModelActive;
+    }
+
+    public void setArModelActive(Integer arModelActive) {
+        this.arModelActive = arModelActive;
+    }
+
+    public String getOutUrl() {
+        return outUrl;
+    }
+
+    public void setOutUrl(String outUrl) {
+        this.outUrl = outUrl;
+    }
+
+    public Integer getTestSetting() {
+        return testSetting;
+    }
+
+    public void setTestSetting(Integer testSetting) {
+        this.testSetting = testSetting;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -26,8 +26,6 @@ public class ArThemeManagement {
 
     private Integer cUserId;
 
-    private Integer arMaterialId;
-
     private Integer deleteNum;
 
     public Integer getDeleteNum() {
@@ -108,13 +106,5 @@ public class ArThemeManagement {
 
     public void setcUserId(Integer cUserId) {
         this.cUserId = cUserId;
-    }
-
-    public Integer getArMaterialId() {
-        return arMaterialId;
-    }
-
-    public void setArMaterialId(Integer arMaterialId) {
-        this.arMaterialId = arMaterialId;
     }
 }
