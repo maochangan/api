@@ -6,8 +6,6 @@ public class ArCharManagement {
 
     private Integer id;
 
-    private String arChartImageUrl;
-
     private String arChartImageId;
 
     private String arChartModelUrl;
@@ -40,14 +38,6 @@ public class ArCharManagement {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getArChartImageUrl() {
-        return arChartImageUrl;
-    }
-
-    public void setArChartImageUrl(String arChartImageUrl) {
-        this.arChartImageUrl = arChartImageUrl;
     }
 
     public String getArChartImageId() {

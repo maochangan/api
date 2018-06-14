@@ -7,9 +7,7 @@ import com.sshy.api.bean.ArCharManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import com.sshy.api.service.CUserService;
-import com.sshy.api.utils.ARManaUtil.AddTarget;
-import com.sshy.api.utils.ARManaUtil.GetTarget;
-import com.sshy.api.utils.ARManaUtil.GetTargets;
+import com.sshy.api.utils.ARManaUtil.*;
 import com.sshy.api.utils.ARutils.ResultInfo;
 import com.sshy.api.utils.ARutils.WebAR;
 import com.sshy.api.utils.ConstantInterface;
@@ -35,10 +33,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @CrossOrigin(origins = "*" , maxAge = 3600)
@@ -83,6 +79,8 @@ public class CUserController {
     }
 
     //**************************分割线**************************//
+
+    /*主题管理*/
 
     /**
      * 获取全部主题列表
@@ -213,18 +211,34 @@ public class CUserController {
     }
 
 
+    /*识别图管理*/
+
     /**
      * 获取识别图列表
      */
     @RequestMapping(value = "getARTargets", method = RequestMethod.GET)
     public JsonResult getImages() {
-        Map result = null;
-        try {
-            result = GetTargets.getTargets();
-            return JsonResult.success().add("result" , result);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return JsonResult.fail().add("err", "err");
+        logger.info("根据不同商户对应自己的AR识别图列表 数据c_user_id控制  这边未控制");
+        List<ArCharManagement> list = cUserService.getAllARChart();
+        if (null == list) {
+            return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+        }else{
+            try {
+                Iterator<ArCharManagement> integer = list.iterator();
+                Map result = new TreeMap();
+                while (integer.hasNext()) {
+                    Map target = GetTarget.getTarget(integer.next().getArChartImageId());
+                    if((Integer) target.get("statusCode") == 0){
+                        result.put("target", target);
+                    }
+                    continue;
+                }
+                return JsonResult.success().add("result" , result);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error(e.getMessage());
+                return JsonResult.fail().add("err", "err");
+            }
         }
     }
 
@@ -232,9 +246,9 @@ public class CUserController {
      * 添加识别图
      */
     @RequestMapping(value = "addARTarget", method = RequestMethod.POST)
-    public JsonResult addARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name, @Param("type") String type,
+    public JsonResult addARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name,
                                   @Param("size") String size, HttpServletRequest request) {
-        logger.info("检擦参数完整性");
+        logger.info("检查参数完整性");
         if (null == model.getOriginalFilename() || null == image.getOriginalFilename()) {
             return JsonResult.fail().add("msg", ConstantInterface.DATA_UPLOAD_ERR);
         }
@@ -250,17 +264,21 @@ public class CUserController {
             String serverPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
                     request.getServletContext().getContextPath() + "/cName" + "/ARTargetModel/" +
                     model.getOriginalFilename();
-            Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),type , name , size , serverPath);
+            Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),name , size , serverPath);
             if((Integer) result.get("statusCode") == 0){
+                logger.info("success");
                 Map target = (Map) result.get("result");
                 String targetId = (String) target.get("targetId");
                 ArCharManagement arCharManagement = new ArCharManagement();
                 arCharManagement.setDeleteNum(1);
                 arCharManagement.setArChartImageId(targetId);
                 arCharManagement.setArChartModelUrl(serverPath);
+                arCharManagement.setArChartCreateTime(new Timestamp(new Date().getTime()));
                 boolean state = cUserService.addARChart(arCharManagement);
                 if (state) {
                     return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }else {
+                    return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
                 }
             }
             return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
@@ -270,85 +288,113 @@ public class CUserController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * 识别图添加包含模型
-     * 作废(TODO)
+     * 获取识别图
      */
-    @RequestMapping(value = "addARModel", method = RequestMethod.POST)
-    public JsonResult testAR(@Param("image") MultipartFile image , @Param("model") MultipartFile model , HttpServletRequest request){
-        String cloudKey = "ee9b273d2deddfd932ddca3db269ad0c";
-        String cloudSecret = "j2qQBZaiZAt3hdDHEMMdzOXIy2mIGOrofIWo8HO1ZdSi0XrQ0lx9E9ntgBfTeBdmGyltt7bg8hbRW0rhwtq4yK9WEFJFiL2xB3lyZMr35BCI6DtWMvvrYLOPMV01d9E9";
-        String cloudUrl = "http://ea3a961d7d77b977059d064111d9c1b0.cn1.crs.easyar.com:8080/search";
-        WebAR webAR = new WebAR(cloudKey, cloudSecret, cloudUrl);
+    @RequestMapping(value = "getARTarget", method = RequestMethod.GET)
+    public JsonResult getARTarget(String targetId){
+        logger.info("查询识别图信息");
         try {
-            Base64.Encoder encoder = Base64.getEncoder();
-            String imageBase64 = encoder.encodeToString(image.getBytes());
-            ResultInfo info = webAR.recognize(imageBase64);
-            if (info.getStatusCode() == 0/* && model.getOriginalFilename() != null*/) {
-                logger.info("识别到目标"+info.getResult().getTarget().getTargetId());
-                String imagePath = ConstantInterface.FILE_BASE_PATH + "cName/" + "ArChartDir/img/";
-                File dir = new File(imagePath);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                String finalPath = imagePath + image.getOriginalFilename();
-                File finalDir = new File(finalPath);
-                image.transferTo(finalDir);
-                String imgServerPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
-                        request.getServletContext().getContextPath() + "/cName" + "/ArChartDir/img/" +
-                        image.getOriginalFilename();
-
-                String modelPath = ConstantInterface.FILE_BASE_PATH + "cName/" + "ArChartDir/model/";
-                File mdir = new File(modelPath);
-                if (!mdir.exists()) {
-                    mdir.mkdirs();
-                }
-                String mfinalPath = modelPath + model.getOriginalFilename();
-                File mfinalDir = new File(mfinalPath);
-                image.transferTo(mfinalDir);
-                String modelServerPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
-                        request.getServletContext().getContextPath() + "/cName" + "/ArChartDir/model/" +
-                        model.getOriginalFilename();
-                ArCharManagement arCharManagement = new ArCharManagement();
-                arCharManagement.setArChartCreateTime(new Timestamp(new Date().getTime()));
-                arCharManagement.setArChartImageId(info.getResult().getTarget().getTargetId());
-                arCharManagement.setArChartImageUrl(imgServerPath);
-                arCharManagement.setArChartModelUrl(modelServerPath);
-                arCharManagement.setDeleteNum(1);
-                boolean state = cUserService.addARChart(arCharManagement);
-                if (state) {
-                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
-                }else{
-                    return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
-                }
-            } else {
-                logger.info("未识别到目标");
-                return JsonResult.fail().add("msg", ConstantInterface.NO_MATCHION);
+            Map result = GetTarget.getTarget(targetId);
+            if ((Integer) result.get("statusCode") == 0) {
+                logger.info("查询成功");
+                Map target = (Map) result.get("result");
+                return JsonResult.success().add("target", target);
+            }else{
+                return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             return JsonResult.fail().add("err", "err");
         }
     }
 
+    /**
+     * 修改识别图
+     */
+    @RequestMapping(value = "updateARTarget", method = RequestMethod.POST)
+    public JsonResult updateARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name,
+                                  @Param("size") String size, @Param("active") String active , @Param("targetId") String targetId, HttpServletRequest request) {
+        logger.info("检查参数完整性");
+        try {
+            String baseImage = null;
+            String meta = null;
+            Map target = GetTarget.getTarget(targetId);
+            if((Integer) target.get("statusCode") == 0){
+                baseImage = (String) target.get("trackingImage");
+                meta = (String) target.get("meta");
+            }
+            if(model.getOriginalFilename() == null && image.getOriginalFilename() == null){
+                Map upTarget = UpdateTarget.updateTarget(targetId, baseImage, active, name, size, meta);
+                if((Integer) upTarget.get("statusCode") == 0){
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }
+                return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+            }else if(model.getOriginalFilename() == null && image.getOriginalFilename() != null){
+                Map upTarget = UpdateTarget.updateTarget(targetId, Base64.getEncoder().encodeToString(image.getBytes()), active, name, size, meta);
+                if((Integer) upTarget.get("statusCode") == 0){
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }
+                return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+            }else if(model.getOriginalFilename() != null && image.getOriginalFilename() == null){
+                String path = ConstantInterface.FILE_BASE_PATH + "cName/" + "ARTargetModel/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                String finalPath = path + model.getOriginalFilename();
+                File finalDir = new File(finalPath);
+                model.transferTo(finalDir);
+                String serverPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
+                        request.getServletContext().getContextPath() + "/cName" + "/ARTargetModel/" +
+                        model.getOriginalFilename();
+                Map upTarget = UpdateTarget.updateTarget(targetId, baseImage, active, name, size, serverPath);
+                if((Integer) upTarget.get("statusCode") == 0 && cUserService.updateARTarget(serverPath, targetId)){
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }
+                return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+            }else{
+                String path = ConstantInterface.FILE_BASE_PATH + "cName/" + "ARTargetModel/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                String finalPath = path + model.getOriginalFilename();
+                File finalDir = new File(finalPath);
+                model.transferTo(finalDir);
+                String serverPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
+                        request.getServletContext().getContextPath() + "/cName" + "/ARTargetModel/" +
+                        model.getOriginalFilename();
+                Map upTarget = UpdateTarget.updateTarget(targetId, Base64.getEncoder().encodeToString(image.getBytes()), active, name, size, serverPath);
+                if((Integer) upTarget.get("statusCode") == 0 && cUserService.updateARTarget(serverPath, targetId)){
+                    return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+                }
+                return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return JsonResult.fail().add("err", "err");
+        }
+    }
+
+    /**
+     * 识别图删除
+     */
+    @RequestMapping(value = "removeTarget", method = RequestMethod.GET)
+    public JsonResult removeTarget(String targetId){
+        logger.info("识别图删除");
+        try {
+            Map result = RemoveTarget.removeTarget(targetId);
+            if((Integer) result.get("statusCode") == 0){
+                cUserService.removeTarget(targetId);
+                return JsonResult.success().add("msg", ConstantInterface.SUCCESS_MSG);
+            }
+            return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return JsonResult.fail().add("err", "err");
+        }
+    }
 
 
 

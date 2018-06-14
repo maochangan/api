@@ -169,10 +169,25 @@
     </insert>
 
 
+
+    <resultMap id="arChartBase" type="com.sshy.api.bean.ArCharManagement">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="ar_chart_image_id" jdbcType="VARCHAR" property="arChartImageId" />
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
+        <result column="ar_chart_create_time" jdbcType="TIMESTAMP" property="arChartCreateTime" />
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
+        <result column="ar_chart_model_url" jdbcType="VARCHAR" property="arChartModelUrl" />
+    </resultMap>
+
+
+    <select id="getAllARChart" resultMap="arChartBase">
+        select * from ar_chart_management
+    </select>
+
+
     <update id="updateARChartSerByParKry" parameterType="com.sshy.api.bean.ArCharManagement">
         UPDATE ar_chart_management
         <trim prefix="set" suffixOverrides=",">
-            <if test="null != arChartImageUrl">ar_chart_image_url = #{arChartImageUrl , jdbcType=VARCHAR}</if>
             <if test="null != arChartImageId">,ar_chart_image_id = #{arChartImageId , jdbcType=INTEGER}</if>
             <if test="null != arChartModelUrl">,ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR}</if>
             <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>

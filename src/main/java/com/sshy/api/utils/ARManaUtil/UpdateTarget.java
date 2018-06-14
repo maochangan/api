@@ -11,18 +11,18 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class AddTarget {
+public class UpdateTarget {
 
-    public static Map addTarget(String baseImage , String name , String size , String meta) throws ExecutionException, InterruptedException {
+    public static Map updateTarget(String targetId ,String baseImage , String active , String name , String size , String meta) throws ExecutionException, InterruptedException {
         AsyncHttpClient client = new DefaultAsyncHttpClient();
         JSONObject params = new JSONObject();
         params.put("image",baseImage);
-        params.put("type","ImageTarget");
         params.put("name", name);
+        params.put("active", active);
         params.put("size", size);
-        params.put("meta", meta);  // This is customerized field to store AR content. e.x.: base64(2D picture) less than 2MB or URL of 3D model Object file
+        params.put("meta", meta);
         Auth.signParam(params, ConstantInterface.AR_APP_KEY, ConstantInterface.AR_SECRET_KEY);
-        Future<Map> f = client.preparePost(ConstantInterface.AR_SERVER_URL + "/targets/")
+        Future<Map> f = client.preparePut(ConstantInterface.AR_SERVER_URL + "/target/" + targetId)
                 .setBody(params.toString().getBytes())
                 .execute(new AsyncCompletionHandler<Map>() {
                     @Override

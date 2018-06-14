@@ -5,6 +5,7 @@ import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CUserService {
 
@@ -27,4 +28,8 @@ public interface CUserService {
     boolean addARChart(ArCharManagement arCharManagement);
 
     List<ArCharManagement> getAllARChart();
+
+    boolean updateARTarget(String serverPath, String targetId);
+
+    void removeTarget(String targetId);
 }

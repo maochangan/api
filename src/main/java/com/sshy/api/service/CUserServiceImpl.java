@@ -98,4 +98,16 @@ public class CUserServiceImpl implements CUserService {
         }
     }
 
+    @Override
+    public boolean updateARTarget(String serverPath, String targetId) {
+        Integer result = companyUserDao.updateARTarget(serverPath, targetId);
+        return result != 0;
+    }
+
+    @Override
+    public void removeTarget(String targetId) {
+        Integer result = companyUserDao.removeTarget(targetId);
+        logger.info("code" + result);
+    }
+
 }
