@@ -4,6 +4,7 @@ package com.sshy.api.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sshy.api.bean.ArCharManagement;
+import com.sshy.api.bean.ArModelManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import com.sshy.api.service.CUserService;
@@ -246,7 +247,7 @@ public class CUserController {
      * 添加识别图
      */
     @RequestMapping(value = "addARTarget", method = RequestMethod.POST)
-    public JsonResult addARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name,
+    public JsonResult addARTarget(@Param("model") MultipartFile model,@Param("image")MultipartFile image , @Param("name") String name,@Param("modelName") String modelName ,
                                   @Param("size") String size, HttpServletRequest request) {
         logger.info("检查参数完整性");
         if (null == model.getOriginalFilename() || null == image.getOriginalFilename()) {
@@ -264,6 +265,16 @@ public class CUserController {
             String serverPath = ConstantInterface.SERVER_PATH + request.getLocalPort() +
                     request.getServletContext().getContextPath() + "/cName" + "/ARTargetModel/" +
                     model.getOriginalFilename();
+            ArModelManagement arModelManagement = new ArModelManagement();
+            arModelManagement.setArModelUrl(serverPath);
+//            arModelManagement.setcUserId(1);//TODO 用户对应操作
+            arModelManagement.setDeleteNum(1);
+            arModelManagement.setArModelName(modelName);
+            arModelManagement.setArModelCreateTime(new Timestamp(new Date().getTime()));
+            boolean insertResult = cUserService.addARModel(arModelManagement);
+            if(insertResult){
+
+            }
             Map result = AddTarget.addTarget(Base64.getEncoder().encodeToString(image.getBytes()),name , size , serverPath);
             if((Integer) result.get("statusCode") == 0){
                 logger.info("success");
@@ -396,6 +407,8 @@ public class CUserController {
         }
     }
 
+
+    /*展示内容管理*/
 
 
 

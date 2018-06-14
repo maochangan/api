@@ -8,13 +8,21 @@ public class ArCharManagement {
 
     private String arChartImageId;
 
-    private String arChartModelUrl;
-
     private Integer cUserId;
+
+    private Integer arModelId;
 
     private Timestamp arChartCreateTime;
 
     private Integer deleteNum;
+
+    public Integer getArModelId() {
+        return arModelId;
+    }
+
+    public void setArModelId(Integer arModelId) {
+        this.arModelId = arModelId;
+    }
 
     public Integer getDeleteNum() {
         return deleteNum;
@@ -46,14 +54,6 @@ public class ArCharManagement {
 
     public void setArChartImageId(String arChartImageId) {
         this.arChartImageId = arChartImageId;
-    }
-
-    public String getArChartModelUrl() {
-        return arChartModelUrl;
-    }
-
-    public void setArChartModelUrl(String arChartModelUrl) {
-        this.arChartModelUrl = arChartModelUrl;
     }
 
     public Integer getcUserId() {

@@ -1,6 +1,7 @@
 package com.sshy.api.dao;
 
 import com.sshy.api.bean.ArCharManagement;
+import com.sshy.api.bean.ArModelManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import org.apache.ibatis.annotations.*;
@@ -62,4 +63,8 @@ public interface CompanyUserDao {
 
     @Delete("DELETE FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     Integer removeTarget(String targetId);
+
+
+    //展示内容管理
+    Integer addARModel(ArModelManagement arModelManagement);
 }

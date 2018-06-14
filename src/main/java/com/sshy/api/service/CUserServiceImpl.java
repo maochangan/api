@@ -1,6 +1,7 @@
 package com.sshy.api.service;
 
 import com.sshy.api.bean.ArCharManagement;
+import com.sshy.api.bean.ArModelManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 import com.sshy.api.dao.CompanyUserDao;
@@ -108,6 +109,12 @@ public class CUserServiceImpl implements CUserService {
     public void removeTarget(String targetId) {
         Integer result = companyUserDao.removeTarget(targetId);
         logger.info("code" + result);
+    }
+
+    @Override
+    public boolean addARModel(ArModelManagement arModelManagement) {
+        Integer result = companyUserDao.addARModel(arModelManagement);
+        return result !=0 ;
     }
 
 }

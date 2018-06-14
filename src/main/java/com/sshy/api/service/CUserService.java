@@ -1,6 +1,7 @@
 package com.sshy.api.service;
 
 import com.sshy.api.bean.ArCharManagement;
+import com.sshy.api.bean.ArModelManagement;
 import com.sshy.api.bean.ArThemeManagement;
 import com.sshy.api.bean.CompanyUser;
 
@@ -32,4 +33,6 @@ public interface CUserService {
     boolean updateARTarget(String serverPath, String targetId);
 
     void removeTarget(String targetId);
+
+    boolean addARModel(ArModelManagement arModelManagement);
 }

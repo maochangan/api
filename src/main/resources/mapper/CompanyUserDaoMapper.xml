@@ -176,7 +176,7 @@
         <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
         <result column="ar_chart_create_time" jdbcType="TIMESTAMP" property="arChartCreateTime" />
         <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
-        <result column="ar_chart_model_url" jdbcType="VARCHAR" property="arChartModelUrl" />
+        <result column="ar_model_id" jdbcType="INTEGER" property="arModelId" />
     </resultMap>
 
 
@@ -189,13 +189,62 @@
         UPDATE ar_chart_management
         <trim prefix="set" suffixOverrides=",">
             <if test="null != arChartImageId">,ar_chart_image_id = #{arChartImageId , jdbcType=INTEGER}</if>
-            <if test="null != arChartModelUrl">,ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR}</if>
+            <if test="null != arModelId">,ar_model_id = #{arModelId , jdbcType=INTEGER}</if>
             <if test="null != cUserId">,c_user_id = #{cUserId , jdbcType=INTEGER}</if>
             <if test="null != arChartCreateTime">,ar_chart_create_time = #{arChartCreateTime , jdbcType=TIMESTAMP}</if>
             <if test="null != deleteNum">,delete_num = #{deleteNum , jdbcType=TIMESTAMP}</if>
             where id = #{id , jdbcType=INTEGER}
         </trim>
     </update>
+
+
+
+
+
+
+    <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement">
+        insert into ar_model_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="cUserId != null">
+                c_user_id,
+            </if>
+            <if test="arModelUrl != null">
+                ar_model_url,
+            </if>
+            <if test="arModelName != null">
+                ar_model_name,
+            </if>
+            <if test="arModelCreateTime != null">
+                ar_model_create_time,
+            </if>
+            <if test="deleteNum != null">
+                delete_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id , jdbcType=INTEGER},
+            </if>
+            <if test="cUserId != null">
+                #{cUserId , jdbcType=INTEGER},
+            </if>
+            <if test="arModelUrl != null">
+                #{arModelUrl , jdbcType=VARCHAR},
+            </if>
+            <if test="arModelName != null">
+                #{arModelName , jdbcType=VARCHAR},
+            </if>
+            <if test="arModelCreateTime != null">
+                #{arModelCreateTime , jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleteNum != null">
+                #{deleteNum , jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
 
 
