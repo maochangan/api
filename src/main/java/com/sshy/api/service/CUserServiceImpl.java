@@ -160,5 +160,33 @@ public class CUserServiceImpl implements CUserService {
         return num;
     }
 
+    @Override
+    public boolean addFile(FileTable fileTable) {
+        Integer result = companyUserDao.addFile(fileTable);
+        return result != 0;
+    }
+
+    @Override
+    public List<FileTable> getFileList(String fileType) {
+        List<FileTable> list = companyUserDao.getFileList(fileType);
+        if(0 == list.size()){
+            return null;
+        }else{
+            return list;
+        }
+    }
+
+    @Override
+    public boolean deleteFile(Integer id) {
+        Integer result = companyUserDao.deleteFile(id);
+        return result != 0;
+    }
+
+    @Override
+    public String selectFileById(Integer id) {
+        FileTable fileTable = companyUserDao.selectFileById(id);
+        return fileTable.getFileUrl();
+    }
+
 
 }

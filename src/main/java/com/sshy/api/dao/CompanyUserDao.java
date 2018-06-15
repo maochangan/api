@@ -76,4 +76,18 @@ public interface CompanyUserDao {
 
     @Select("SELECT count(*) FROM ar_chart_management WHERE ar_model_id = #{id , jdbcType=INTEGER}")
     Integer getCountImageNum(Integer id);
+
+
+
+
+
+    /*素材管理*/
+    Integer addFile(FileTable fileTable);
+
+    List<FileTable> getFileList(@Param("fileType") String fileType);
+
+    @Delete("DELETE FROM file_table WHERE id = #{id , jdbcType=INTEGER}")
+    Integer deleteFile(Integer id);
+
+    FileTable selectFileById(Integer id);
 }

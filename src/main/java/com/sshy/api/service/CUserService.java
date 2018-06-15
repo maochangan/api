@@ -45,4 +45,12 @@ public interface CUserService {
     boolean deleteARThemeById(Integer id);
 
     Integer getCountImageNum(Integer id);
+
+    boolean addFile(FileTable fileTable);
+
+    List<FileTable> getFileList(String fileType);
+
+    boolean deleteFile(Integer id);
+
+    String selectFileById(Integer id);
 }

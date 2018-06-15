@@ -10,7 +10,7 @@ public class ArThemeManagement {
 
     private String arThemeName;
 
-    private String ArThemeDescribe;
+    private String arThemeDescribe;
 
     private String arThemeImgUrl;
 
@@ -53,11 +53,11 @@ public class ArThemeManagement {
     }
 
     public String getArThemeDescribe() {
-        return ArThemeDescribe;
+        return arThemeDescribe;
     }
 
     public void setArThemeDescribe(String arThemeDescribe) {
-        ArThemeDescribe = arThemeDescribe;
+        this.arThemeDescribe = arThemeDescribe;
     }
 
     public String getArThemeImgUrl() {

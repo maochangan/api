@@ -66,7 +66,7 @@
     <resultMap id="baseMap" type="com.sshy.api.bean.ArThemeManagement">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="ar_theme_name" jdbcType="VARCHAR" property="arThemeName" />
-        <result column="ar_theme_describe" jdbcType="VARCHAR" property="ArThemeDescribe" />
+        <result column="ar_theme_describe" jdbcType="VARCHAR" property="arThemeDescribe" />
         <result column="ar_theme_img_url" jdbcType="VARCHAR" property="arThemeImgUrl" />
         <result column="ar_theme_active" jdbcType="INTEGER" property="arThemeActive" />
         <result column="ar_theme_start_time" jdbcType="TIMESTAMP" property="arThemeStartTime" />
@@ -313,5 +313,57 @@
     </update>
 
 
+    <!--素材管理-->
+    <resultMap id="arFileBase" type="com.sshy.api.bean.FileTable">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    </resultMap>
+
+    <insert id="addFile" parameterType="com.sshy.api.bean.FileTable" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO file_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fileType != null">
+                file_type,
+            </if>
+            <if test="fileUrl != null">
+                file_url,
+            </if>
+            <if test="cUserId != null">
+                c_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id , jdbcType=INTEGER},
+            </if>
+            <if test="fileType != null">
+                #{fileType , jdbcType=VARCHAR},
+            </if>
+            <if test="fileUrl != null">
+                #{fileUrl , jdbcType=VARCHAR},
+            </if>
+            <if test="cUserId != null">
+                #{cUserId , jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getFileList" resultMap="arFileBase">
+        select * from file_table
+        <where>
+            <if test="fileType != null">
+                file_type = #{fileType , jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectFileById" resultMap="arFileBase">
+      select * from file_table where id = #{id , jdbcType=INTEGER}
+    </select>
 
 </mapper>
