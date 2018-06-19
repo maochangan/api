@@ -1,5 +1,7 @@
 web:
-  upload-path: D:/file/
+  upload-path: /usr/fileTest/
+#  upload-path: D://file/
+
 
 server:
   port: 8011
@@ -9,9 +11,9 @@ server:
 
 spring:
   datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/sshy_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: wtdbuser
+    password: wtdbuser
+    url: jdbc:mysql://bj-cdb-hgkqwllz.sql.tencentcdb.com:63308/test_tb?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.jdbc.Driver
   resources:
     static-locations: file:${web.upload-path}
@@ -23,7 +25,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
-  path: D:/sshylog/logs
+  path: /usr/testLog
 
 pagehelper:
   helperDialect: mysql

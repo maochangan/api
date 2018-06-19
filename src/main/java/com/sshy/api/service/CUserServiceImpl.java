@@ -183,9 +183,9 @@ public class CUserServiceImpl implements CUserService {
     }
 
     @Override
-    public String selectFileById(Integer id) {
+    public FileTable selectFileById(Integer id) {
         FileTable fileTable = companyUserDao.selectFileById(id);
-        return fileTable.getFileUrl();
+        return fileTable;
     }
 
 

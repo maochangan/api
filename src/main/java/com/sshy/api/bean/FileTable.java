@@ -10,6 +10,16 @@ public class FileTable {
 
     private Integer cUserId;
 
+    private String fileKey;
+
+    public String getFileKey() {
+        return fileKey;
+    }
+
+    public void setFileKey(String fileKey) {
+        this.fileKey = fileKey;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -76,6 +76,12 @@
         <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
     </resultMap>
 
+    
+
+    <select id="getARThemeById" resultMap="baseMap">
+        select * from ar_theme_management where id = #{id , jdbcType=INTEGER}
+    </select>
+
     <select id="selectAll" resultMap="baseMap">
         select * from ar_theme_management where delete_num = 0
     </select>
@@ -108,7 +114,7 @@
             <if test="arThemeActive != null">
                 ar_theme_active,
             </if>
-            <if test="ArThemeDescribe != null">
+            <if test="arThemeDescribe != null">
                 ar_theme_describe,
             </if>
             <if test="arThemeImgUrl != null">
@@ -140,8 +146,8 @@
             <if test="arThemeActive != null">
                 #{arThemeActive , jdbcType=INTEGER},
             </if>
-            <if test="ArThemeDescribe != null">
-                #{ArThemeDescribe , jdbcType=VARCHAR},
+            <if test="arThemeDescribe != null">
+                #{arThemeDescribe , jdbcType=VARCHAR},
             </if>
             <if test="arThemeImgUrl != null">
                 #{arThemeImgUrl , jdbcType=VARCHAR},
@@ -181,6 +187,19 @@
     <select id="getAllARChart" resultMap="arChartBase">
         select * from ar_chart_management
     </select>
+
+    <update id="updateARTarget" parameterType="com.sshy.api.bean.ArCharManagement">
+        UPDATE ar_chart_management
+        <set>
+            <if test="null != arModelId">ar_model_id = #{arModelId , jdbcType=INTEGER},</if>
+            <if test="null != cUserId">c_user_id = #{cUserId , jdbcType=INTEGER},</if>
+            <if test="null != arChartCreateTime">ar_chart_create_time = #{arChartCreateTime , jdbcType=TIMESTAMP},</if>
+            <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=TIMESTAMP},</if>
+            <if test="null != arThemeId">ar_theme_id = #{arThemeId , jdbcType=INTEGER},</if>
+            <if test="null != outUrl">out_url = #{outUrl , jdbcType=VARCHAR},</if>
+        </set>
+        where ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}
+    </update>
 
 
     <update id="updateARChartSerByParKry" parameterType="com.sshy.api.bean.ArCharManagement">
@@ -319,6 +338,7 @@
         <result column="file_type" jdbcType="VARCHAR" property="fileType" />
         <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
         <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+        <result column="file_key" jdbcType="VARCHAR" property="fileKey" />
     </resultMap>
 
     <insert id="addFile" parameterType="com.sshy.api.bean.FileTable" useGeneratedKeys="true" keyProperty="id">
@@ -336,6 +356,9 @@
             <if test="cUserId != null">
                 c_user_id,
             </if>
+            <if test="fileKey != null">
+                file_key,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -349,6 +372,9 @@
             </if>
             <if test="cUserId != null">
                 #{cUserId , jdbcType=INTEGER},
+            </if>
+            <if test="fileKey != null">
+                #{fileKey , jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

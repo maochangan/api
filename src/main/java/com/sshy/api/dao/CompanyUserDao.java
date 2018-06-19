@@ -36,7 +36,6 @@ public interface CompanyUserDao {
 
     Integer addARTheme(ArThemeManagement arThemeManagement);
 
-    @Select("SELECT * FROM ar_theme_management WHERE id = #{id , jdbcType=INTEGER}")
     ArThemeManagement getARThemeById(Integer id);
 
     @Update("UPDATE ar_theme_management SET delete_num = 1 WHERE id = #{id , jdbcType=INTEGER}")
@@ -44,8 +43,8 @@ public interface CompanyUserDao {
 
 
     //识别图管理接口方法
-    @Insert("INSERT INTO ar_chart_management(ar_chart_image_id , ar_chart_model_url , c_user_id , ar_chart_create_time , delete_num)" +
-            "VALUES(#{arChartImageId , jdbcType=INTEGER},#{arChartModelUrl , jdbcType=VARCHAR},#{cUserId , jdbcType=INTEGER },#{arChartCreateTime , jdbcType=TIMESTAMP} , #{deleteNum})")
+    @Insert("INSERT INTO ar_chart_management(ar_chart_image_id , ar_model_id , c_user_id , ar_chart_create_time , delete_num , out_url , ar_theme_id)" +
+            "VALUES(#{arChartImageId , jdbcType=INTEGER},#{arModelId , jdbcType=INTEGER},#{cUserId , jdbcType=INTEGER },#{arChartCreateTime , jdbcType=TIMESTAMP} , #{deleteNum , jdbcType=INTEGER} , #{outUrl , jdbcType=VARCHAR} , #{arThemeId , jdbcType=INTEGER})")
     Integer addARChart(ArCharManagement arCharManagement);
 
     List<ArCharManagement> getAllARChart();
@@ -55,7 +54,7 @@ public interface CompanyUserDao {
     @Select("SELECT * FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     ArCharManagement getARTargetByImageId(String targetId);
 
-    @Update("UPDATE ar_chart_management SET ar_chart_model_url = #{arChartModelUrl , jdbcType=VARCHAR} WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
+    
     Integer updateARTarget(ArCharManagement arCharManagement);
 
     @Delete("DELETE FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")

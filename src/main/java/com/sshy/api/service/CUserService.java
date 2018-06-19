@@ -52,5 +52,5 @@ public interface CUserService {
 
     boolean deleteFile(Integer id);
 
-    String selectFileById(Integer id);
+    FileTable selectFileById(Integer id);
 }
