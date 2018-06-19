@@ -6,7 +6,6 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.model.DeleteObjectRequest;
-import com.qcloud.cos.model.DeleteObjectsResult;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
@@ -26,6 +25,7 @@ public class COSUtil {
         PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
         Date expiration = new Date(new Date().getTime() + 5 * 60 * 10000);
         URL url = cosclient.generatePresignedUrl(bucketName, key, expiration);
+        cosclient.shutdown();
         return url.toString();
     }
 
@@ -37,6 +37,7 @@ public class COSUtil {
             String bucketName = "maochangan-1256949445";
             DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucketName, key);
             cosclient.deleteObject(deleteObjectRequest);
+            cosclient.shutdown();
             return true;
         } catch (CosClientException e) {
             e.printStackTrace();
