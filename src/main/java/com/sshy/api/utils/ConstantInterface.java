@@ -14,7 +14,7 @@ public interface ConstantInterface {
 
     public static final String FAIL_MSG = "操作失败！";
 
-//    public static final String FILE_BASE_PATH = "D:/file/";
+    //    public static final String FILE_BASE_PATH = "D:/file/";
     public static final String FILE_BASE_PATH = "/usr/fileTest/";
 
 //    public static final String SERVER_PATH = "http://localhost:";

@@ -51,32 +51,21 @@
     </insert>
 
 
-
-
-
-
-
-
-
-
-
-
     <!--ar主题操作sql-->
 
     <resultMap id="baseMap" type="com.sshy.api.bean.ArThemeManagement">
-        <id column="id" jdbcType="INTEGER" property="id" />
-        <result column="ar_theme_name" jdbcType="VARCHAR" property="arThemeName" />
-        <result column="ar_theme_describe" jdbcType="VARCHAR" property="arThemeDescribe" />
-        <result column="ar_theme_img_url" jdbcType="VARCHAR" property="arThemeImgUrl" />
-        <result column="ar_theme_active" jdbcType="INTEGER" property="arThemeActive" />
-        <result column="ar_theme_start_time" jdbcType="TIMESTAMP" property="arThemeStartTime" />
-        <result column="ar_theme_end_time" jdbcType="TIMESTAMP" property="arThemeEndTime" />
-        <result column="ar_theme_keyword" jdbcType="VARCHAR" property="arThemeKeyword" />
-        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
-        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ar_theme_name" jdbcType="VARCHAR" property="arThemeName"/>
+        <result column="ar_theme_describe" jdbcType="VARCHAR" property="arThemeDescribe"/>
+        <result column="ar_theme_img_url" jdbcType="VARCHAR" property="arThemeImgUrl"/>
+        <result column="ar_theme_active" jdbcType="INTEGER" property="arThemeActive"/>
+        <result column="ar_theme_start_time" jdbcType="TIMESTAMP" property="arThemeStartTime"/>
+        <result column="ar_theme_end_time" jdbcType="TIMESTAMP" property="arThemeEndTime"/>
+        <result column="ar_theme_keyword" jdbcType="VARCHAR" property="arThemeKeyword"/>
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId"/>
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum"/>
     </resultMap>
 
-    
 
     <select id="getARThemeById" resultMap="baseMap">
         select * from ar_theme_management where id = #{id , jdbcType=INTEGER}
@@ -171,16 +160,16 @@
     </insert>
 
 
-
     <resultMap id="arChartBase" type="com.sshy.api.bean.ArCharManagement">
-        <id column="id" jdbcType="INTEGER" property="id" />
-        <result column="ar_chart_image_id" jdbcType="VARCHAR" property="arChartImageId" />
-        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
-        <result column="ar_chart_create_time" jdbcType="TIMESTAMP" property="arChartCreateTime" />
-        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
-        <result column="ar_model_id" jdbcType="INTEGER" property="arModelId" />
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ar_chart_image_id" jdbcType="VARCHAR" property="arChartImageId"/>
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId"/>
+        <result column="ar_chart_create_time" jdbcType="TIMESTAMP" property="arChartCreateTime"/>
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum"/>
+        <result column="ar_model_id" jdbcType="INTEGER" property="arModelId"/>
         <result column="out_url" jdbcType="VARCHAR" property="outUrl"/>
         <result column="ar_theme_id" jdbcType="INTEGER" property="arThemeId"/>
+        <result column="ar_chart_image_url" jdbcType="VARCHAR" property="arChartImageUrl"/>
     </resultMap>
 
 
@@ -197,6 +186,7 @@
             <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=TIMESTAMP},</if>
             <if test="null != arThemeId">ar_theme_id = #{arThemeId , jdbcType=INTEGER},</if>
             <if test="null != outUrl">out_url = #{outUrl , jdbcType=VARCHAR},</if>
+            <if test="null != arChartImageUrl">ar_chart_image_url = #{arChartImageUrl , jdbcType=VARCHAR},</if>
         </set>
         where ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}
     </update>
@@ -212,33 +202,29 @@
             <if test="null != deleteNum">delete_num = #{deleteNum , jdbcType=TIMESTAMP},</if>
             <if test="null != arThemeId">ar_theme_id = #{arThemeId , jdbcType=INTEGER},</if>
             <if test="null != outUrl">out_url = #{outUrl , jdbcType=VARCHAR},</if>
+            <if test="null != arChartImageUrl">ar_chart_image_url = #{arChartImageUrl , jdbcType=VARCHAR},</if>
         </set>
         where id = #{id , jdbcType=INTEGER}
     </update>
 
 
-
-
-
-
-
-
     <!--展示内容管理-->
 
     <resultMap id="arModelBase" type="com.sshy.api.bean.ArModelManagement">
-        <id column="id" jdbcType="INTEGER" property="id" />
-        <result column="ar_model_url" jdbcType="VARCHAR" property="arModelUrl" />
-        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
-        <result column="ar_model_create_time" jdbcType="TIMESTAMP" property="arModelCreateTime" />
-        <result column="ar_model_name" jdbcType="VARCHAR" property="arModelName" />
-        <result column="delete_num" jdbcType="INTEGER" property="deleteNum" />
-        <result column="ar_model_type" jdbcType="VARCHAR" property="arModelType" />
-        <result column="ar_model_active" jdbcType="INTEGER" property="arModelActive" />
-        <result column="out_url" jdbcType="VARCHAR" property="outUrl" />
-        <result column="test_setting" jdbcType="INTEGER" property="testSetting" />
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ar_model_url" jdbcType="VARCHAR" property="arModelUrl"/>
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId"/>
+        <result column="ar_model_create_time" jdbcType="TIMESTAMP" property="arModelCreateTime"/>
+        <result column="ar_model_name" jdbcType="VARCHAR" property="arModelName"/>
+        <result column="delete_num" jdbcType="INTEGER" property="deleteNum"/>
+        <result column="ar_model_type" jdbcType="VARCHAR" property="arModelType"/>
+        <result column="ar_model_active" jdbcType="INTEGER" property="arModelActive"/>
+        <result column="out_url" jdbcType="VARCHAR" property="outUrl"/>
+        <result column="test_setting" jdbcType="INTEGER" property="testSetting"/>
     </resultMap>
 
-    <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addARModel" parameterType="com.sshy.api.bean.ArModelManagement" useGeneratedKeys="true"
+            keyProperty="id">
         insert into ar_model_management
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -334,11 +320,11 @@
 
     <!--素材管理-->
     <resultMap id="arFileBase" type="com.sshy.api.bean.FileTable">
-        <id column="id" jdbcType="INTEGER" property="id" />
-        <result column="file_type" jdbcType="VARCHAR" property="fileType" />
-        <result column="c_user_id" jdbcType="INTEGER" property="cUserId" />
-        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
-        <result column="file_key" jdbcType="VARCHAR" property="fileKey" />
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="file_type" jdbcType="VARCHAR" property="fileType"/>
+        <result column="c_user_id" jdbcType="INTEGER" property="cUserId"/>
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
+        <result column="file_key" jdbcType="VARCHAR" property="fileKey"/>
     </resultMap>
 
     <insert id="addFile" parameterType="com.sshy.api.bean.FileTable" useGeneratedKeys="true" keyProperty="id">
@@ -389,7 +375,7 @@
     </select>
 
     <select id="selectFileById" resultMap="arFileBase">
-      select * from file_table where id = #{id , jdbcType=INTEGER}
+        select * from file_table where id = #{id , jdbcType=INTEGER}
     </select>
 
 </mapper>

@@ -13,11 +13,11 @@ import java.util.concurrent.Future;
 
 public class AddTarget {
 
-    public static Map addTarget(String baseImage , String name , String size , String meta) throws ExecutionException, InterruptedException {
+    public static Map addTarget(String baseImage, String name, String size, String meta) throws ExecutionException, InterruptedException {
         AsyncHttpClient client = new DefaultAsyncHttpClient();
         JSONObject params = new JSONObject();
-        params.put("image",baseImage);
-        params.put("type","ImageTarget");
+        params.put("image", baseImage);
+        params.put("type", "ImageTarget");
         params.put("name", name);
         params.put("size", size);
         params.put("meta", meta);  // This is customerized field to store AR content. e.x.: base64(2D picture) less than 2MB or URL of 3D model Object file

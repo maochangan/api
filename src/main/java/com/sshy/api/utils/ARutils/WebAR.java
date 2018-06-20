@@ -18,16 +18,17 @@ public class WebAR {
 
     private OkHttpClient http;
 
-    public WebAR(String cloudKey, String cloudSecret, String cloudUrl) {
-        this.cloudKey = cloudKey;
-        this.cloudSecret = cloudSecret;
-        this.cloudUrl = cloudUrl;
+    public WebAR() {
+        this.cloudKey = "ee9b273d2deddfd932ddca3db269ad0c";
+        this.cloudSecret = "j2qQBZaiZAt3hdDHEMMdzOXIy2mIGOrofIWo8HO1ZdSi0XrQ0lx9E9ntgBfTeBdmGyltt7bg8hbRW0rhwtq4yK9WEFJFiL2xB3lyZMr35BCI6DtWMvvrYLOPMV01d9E9";
+        this.cloudUrl = "http://ea3a961d7d77b977059d064111d9c1b0.cn1.crs.easyar.com:8080/search";
 
         this.http = new OkHttpClient();
     }
 
     /**
      * 将图片数据签名，并发送到识别服务器
+     *
      * @param image 图片的base64数据
      * @return
      * @throws IOException
@@ -56,7 +57,7 @@ public class WebAR {
             digest.update(str.getBytes());
             byte[] bytes = digest.digest();
 
-            for (byte b: bytes) {
+            for (byte b : bytes) {
                 String hex = Integer.toHexString(b & 0XFF);
                 builder.append(hex.length() == 1 ? "0" + hex : hex);
             }

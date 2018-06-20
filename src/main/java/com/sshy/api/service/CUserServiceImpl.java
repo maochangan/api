@@ -24,9 +24,9 @@ public class CUserServiceImpl implements CUserService {
     @Override
     public List<ArThemeManagement> getAllARTheme() {
         List<ArThemeManagement> list = companyUserDao.selectAll();
-        if(ConstantInterface.NO_DATA_INSERT_NUM == list.size()){
+        if (ConstantInterface.NO_DATA_INSERT_NUM == list.size()) {
             return null;
-        }else{
+        } else {
             return list;
         }
     }
@@ -46,9 +46,9 @@ public class CUserServiceImpl implements CUserService {
     @Override
     public Integer getCunionId(String cUnionId) {
         Map<String, Object> map = companyUserDao.selectByCunId(cUnionId);
-        if(map != null){
+        if (map != null) {
             return (Integer) map.get("id");
-        }else{
+        } else {
             return null;
         }
     }
@@ -75,7 +75,7 @@ public class CUserServiceImpl implements CUserService {
         ArThemeManagement arThemeManagement = companyUserDao.getARThemeById(id);
         if (null == arThemeManagement) {
             return null;
-        }else{
+        } else {
             return arThemeManagement;
         }
     }
@@ -91,7 +91,7 @@ public class CUserServiceImpl implements CUserService {
         List<ArCharManagement> list = companyUserDao.getAllARChart();
         if (list.size() == ConstantInterface.NO_DATA_INSERT_NUM) {
             return null;
-        }else{
+        } else {
             return list;
         }
     }
@@ -111,15 +111,15 @@ public class CUserServiceImpl implements CUserService {
     @Override
     public boolean addARModel(ArModelManagement arModelManagement) {
         Integer result = companyUserDao.addARModel(arModelManagement);
-        return result !=0 ;
+        return result != 0;
     }
 
     @Override
     public List<ArModelManagement> getARModelList() {
         List<ArModelManagement> result = companyUserDao.getARModleList();
-        if(0 == result.size()){
+        if (0 == result.size()) {
             return null;
-        }else{
+        } else {
             return result;
         }
     }
@@ -169,9 +169,9 @@ public class CUserServiceImpl implements CUserService {
     @Override
     public List<FileTable> getFileList(String fileType) {
         List<FileTable> list = companyUserDao.getFileList(fileType);
-        if(0 == list.size()){
+        if (0 == list.size()) {
             return null;
-        }else{
+        } else {
             return list;
         }
     }

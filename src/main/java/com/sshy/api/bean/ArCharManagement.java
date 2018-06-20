@@ -20,6 +20,16 @@ public class ArCharManagement {
 
     private String outUrl;
 
+    private String arChartImageUrl;
+
+    public String getArChartImageUrl() {
+        return arChartImageUrl;
+    }
+
+    public void setArChartImageUrl(String arChartImageUrl) {
+        this.arChartImageUrl = arChartImageUrl;
+    }
+
     public Integer getArThemeId() {
         return arThemeId;
     }

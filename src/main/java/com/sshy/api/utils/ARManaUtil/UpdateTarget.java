@@ -13,10 +13,10 @@ import java.util.concurrent.Future;
 
 public class UpdateTarget {
 
-    public static Map updateTarget(String targetId ,String baseImage , String active , String name , String size , String meta) throws ExecutionException, InterruptedException {
+    public static Map updateTarget(String targetId, String baseImage, String active, String name, String size, String meta) throws ExecutionException, InterruptedException {
         AsyncHttpClient client = new DefaultAsyncHttpClient();
         JSONObject params = new JSONObject();
-        params.put("image",baseImage);
+        params.put("image", baseImage);
         params.put("name", name);
         params.put("active", active);
         params.put("size", size);

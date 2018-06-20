@@ -14,7 +14,7 @@ public interface CompanyUserDao {
     Integer addUnionId(@Param("cUnionid") String cUnionid);
 
     @Select("select * from c_unionid where c_unionid = #{cUnionId , jdbcType=VARCHAR}")
-    Map<String , Object> selectByCunId(String cUnionId);
+    Map<String, Object> selectByCunId(String cUnionId);
 
     @Select("select * from c_unionid where id = #{id , jdbcType=INTEGER}")
     Map<String, Object> selectById(Integer id);
@@ -26,7 +26,6 @@ public interface CompanyUserDao {
     Integer updateByParKey(@Param("id") Integer id, @Param("cUnionid") String cUnionid);
 
     Integer addCompanyUser(CompanyUser companyUser);
-
 
 
     //主题管理接口方法
@@ -43,8 +42,8 @@ public interface CompanyUserDao {
 
 
     //识别图管理接口方法
-    @Insert("INSERT INTO ar_chart_management(ar_chart_image_id , ar_model_id , c_user_id , ar_chart_create_time , delete_num , out_url , ar_theme_id)" +
-            "VALUES(#{arChartImageId , jdbcType=INTEGER},#{arModelId , jdbcType=INTEGER},#{cUserId , jdbcType=INTEGER },#{arChartCreateTime , jdbcType=TIMESTAMP} , #{deleteNum , jdbcType=INTEGER} , #{outUrl , jdbcType=VARCHAR} , #{arThemeId , jdbcType=INTEGER})")
+    @Insert("INSERT INTO ar_chart_management(ar_chart_image_id , ar_model_id , c_user_id , ar_chart_create_time , delete_num , out_url , ar_theme_id , ar_chart_image_url)" +
+            "VALUES(#{arChartImageId , jdbcType=INTEGER},#{arModelId , jdbcType=INTEGER},#{cUserId , jdbcType=INTEGER },#{arChartCreateTime , jdbcType=TIMESTAMP} , #{deleteNum , jdbcType=INTEGER} , #{outUrl , jdbcType=VARCHAR} , #{arThemeId , jdbcType=INTEGER} , #{arChartImageUrl , jdbcType=VARCHAR})")
     Integer addARChart(ArCharManagement arCharManagement);
 
     List<ArCharManagement> getAllARChart();
@@ -54,7 +53,7 @@ public interface CompanyUserDao {
     @Select("SELECT * FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
     ArCharManagement getARTargetByImageId(String targetId);
 
-    
+
     Integer updateARTarget(ArCharManagement arCharManagement);
 
     @Delete("DELETE FROM ar_chart_management WHERE ar_chart_image_id = #{arChartImageId , jdbcType=VARCHAR}")
@@ -75,9 +74,6 @@ public interface CompanyUserDao {
 
     @Select("SELECT count(*) FROM ar_chart_management WHERE ar_model_id = #{id , jdbcType=INTEGER}")
     Integer getCountImageNum(Integer id);
-
-
-
 
 
     /*素材管理*/

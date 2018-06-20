@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class COSUtil {
 
-    public static String uploadFile(String key , File localFile){
+    public static String uploadFile(String key, File localFile) {
         COSCredentials cred = new BasicCOSCredentials("AKIDQlzHUhJ14x44sxtlT5dP5aGcpsrLrwxo", "Nhv1wLdkU7btztc8ThjeR7h6JOK5ijfU");
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         COSClient cosclient = new COSClient(cred, clientConfig);
@@ -29,7 +29,7 @@ public class COSUtil {
         return url.toString();
     }
 
-    public static boolean deleteFile(String key){
+    public static boolean deleteFile(String key) {
         try {
             COSCredentials cred = new BasicCOSCredentials("AKIDQlzHUhJ14x44sxtlT5dP5aGcpsrLrwxo", "Nhv1wLdkU7btztc8ThjeR7h6JOK5ijfU");
             ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));

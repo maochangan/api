@@ -2,7 +2,7 @@ package com.sshy.api.bean;
 
 public class FileTable {
 
-    private Integer id ;
+    private Integer id;
 
     private String fileType;
 

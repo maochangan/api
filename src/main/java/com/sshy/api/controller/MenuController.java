@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "*" , maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "menu")
 public class MenuController {
@@ -28,7 +28,7 @@ public class MenuController {
 
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Map getMenu(){
+    public Map getMenu() {
         logger.info("获取菜单  未设置权限");
         Map<String, Object> topMenu = new HashMap<>();
         Map<String, Object> secMenu1 = new HashMap<>();
@@ -38,12 +38,12 @@ public class MenuController {
         list1.add("AR展示内容管理");
         secMenu1.put("senMenu", list1);
         topMenu.put("topMun", secMenu1);
-        topMenu.put("neMeun" , "AR素材管理");
+        topMenu.put("neMeun", "AR素材管理");
         return topMenu;
     }
 
     @RequestMapping(value = "spaceSize", method = RequestMethod.GET)
-    public JsonResult getSpaceSize(){
+    public JsonResult getSpaceSize() {
         logger.info("获取储存空间 ， 假定");
         Integer spaceSize = 1000;
         return JsonResult.success().add("spaceSize", spaceSize);
@@ -51,7 +51,7 @@ public class MenuController {
 
 
     @RequestMapping(value = "flowSize", method = RequestMethod.GET)
-    public JsonResult getFlowSize(){
+    public JsonResult getFlowSize() {
         logger.info("获取浏览, 假定");
         Integer flowSize = 1000;
         return JsonResult.success().add("flowSize", flowSize);

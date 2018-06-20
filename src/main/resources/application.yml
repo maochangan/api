@@ -1,6 +1,6 @@
 web:
-  upload-path: /usr/fileTest/
-#  upload-path: D://file/
+#  upload-path: /usr/fileTest/
+  upload-path: D://file/
 
 
 server:
@@ -8,6 +8,7 @@ server:
   servlet:
     session:
       timeout: 10m
+
 
 spring:
   datasource:
@@ -17,6 +18,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   resources:
     static-locations: file:${web.upload-path}
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 50MB
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
@@ -25,7 +30,8 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
-  path: /usr/testLog
+#  path: /usr/testLog
+  path: D://file/log
 
 pagehelper:
   helperDialect: mysql

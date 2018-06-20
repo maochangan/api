@@ -35,21 +35,21 @@ public class JsonResult {
         this.message = message;
     }
 
-    public static JsonResult success(){
+    public static JsonResult success() {
         JsonResult voResult = new JsonResult();
         voResult.setStatus(1);
         voResult.setMessage("request success");
         return voResult;
     }
 
-    public static JsonResult fail(){
+    public static JsonResult fail() {
         JsonResult voResult = new JsonResult();
         voResult.setStatus(0);
         voResult.setMessage("request fail");
         return voResult;
     }
 
-    public JsonResult add(String key , Object value){
+    public JsonResult add(String key, Object value) {
         this.extend.put(key, value);
         return this;
     }
