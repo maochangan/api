@@ -1,6 +1,6 @@
 web:
-#  upload-path: /usr/fileTest/
-  upload-path: D://file/
+  upload-path: /usr/fileTest/
+#  upload-path: D://file/
 
 
 server:
@@ -30,8 +30,8 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
-#  path: /usr/testLog
-  path: D://file/log
+  path: /usr/testLog
+#  path: D://file/log
 
 pagehelper:
   helperDialect: mysql

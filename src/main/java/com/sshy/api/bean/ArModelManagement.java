@@ -24,6 +24,16 @@ public class ArModelManagement {
 
     private Integer testSetting;
 
+    private String pageSetting;
+
+    public String getPageSetting() {
+        return pageSetting;
+    }
+
+    public void setPageSetting(String pageSetting) {
+        this.pageSetting = pageSetting;
+    }
+
     public String getArModelType() {
         return arModelType;
     }
