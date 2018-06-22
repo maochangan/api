@@ -301,7 +301,7 @@
 
 
     <select id="getARModleList" resultMap="arModelBase">
-        select * from ar_model_management
+        select * from ar_model_management where delete_num = 0
     </select>
 
     <select id="getARModel" resultMap="arModelBase">

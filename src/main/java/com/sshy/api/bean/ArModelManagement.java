@@ -1,5 +1,7 @@
 package com.sshy.api.bean;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 
 public class ArModelManagement {
@@ -8,14 +10,17 @@ public class ArModelManagement {
 
     private Integer cUserId;
 
+    @NotBlank(message = "不可为空")
     private String arModelUrl;
 
+    @NotBlank(message = "不可为空")
     private String arModelName;
 
     private Timestamp arModelCreateTime;
 
     private Integer deleteNum;
 
+    @NotBlank(message = "不可为空")
     private String arModelType;
 
     private Integer arModelActive;

@@ -12,6 +12,8 @@ import com.sshy.api.utils.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -150,8 +152,9 @@ public class CUserController {
      * 获取识别图列表
      */
     @RequestMapping(value = "getARTargets", method = RequestMethod.GET)
-    public JsonResult getImages() {
+    public JsonResult getImages(@RequestParam(value = "ps" , defaultValue = "10") Integer ps , @RequestParam(value = "pn" , defaultValue = "1") Integer pn) {
         logger.info("根据不同商户对应自己的AR识别图列表 数据c_user_id控制  这边未控制");
+        PageHelper.startPage(pn, ps);
         List<ArCharManagement> list = cUserService.getAllARChart();
         if (null == list) {
             return JsonResult.fail().add("msg", ConstantInterface.FAIL_MSG);
@@ -166,6 +169,7 @@ public class CUserController {
                     ArModelManagement arModelManagement = cUserService.getARModel(arCharManagement.getArModelId());
                     ArThemeManagement arThemeManagement = cUserService.getARThemeById(arCharManagement.getArThemeId());
                     if ((Integer) target.get("statusCode") == 0) {
+                        item.put("arChar", arCharManagement);
                         item.put("target", target);
                         item.put("arModel", arModelManagement);
                         item.put("arTheme", arThemeManagement);
@@ -173,7 +177,8 @@ public class CUserController {
                     }
                     continue;
                 }
-                return JsonResult.success().add("result", result);
+                PageInfo<List> pageInfo = new PageInfo(result);
+                return JsonResult.success().add("pageInfo", pageInfo);
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error(e.getMessage());
@@ -213,7 +218,7 @@ public class CUserController {
                 String finalPath = path + image.getOriginalFilename();//key
                 File finalDir = new File(finalPath);
                 image.transferTo(finalDir);
-                String key = "/cName/" + "image/" + image.getOriginalFilename();
+                String key = "/cName/" + "image/" + Math.random()*10 + image.getOriginalFilename();
                 String serverPath = COSUtil.uploadFile(key, finalDir);
                 FileTable fileTable = new FileTable();
                 fileTable.setFileType("image");
@@ -359,7 +364,6 @@ public class CUserController {
                 r.put("arModelManagement", arModelManagement);
                 r.put("num", num);
                 list1.add(r);
-                arModelManagement.setTestSetting(num);
             }
             PageInfo<ArModelManagement> pageInfo = new PageInfo<>(list1);
             return JsonResult.success().add("pageInfo", pageInfo);
@@ -392,7 +396,10 @@ public class CUserController {
      * 展示内容添加
      */
     @RequestMapping(value = "addARModel", method = RequestMethod.POST)
-    public JsonResult addARModel(@ModelAttribute("arModel") ArModelManagement arModel) {
+    public JsonResult addARModel(@Validated ArModelManagement arModel , BindingResult result) {
+        if (result.hasErrors()) {
+            return JsonResult.fail().add("msg", result.getFieldErrors());
+        }
         try {
 //          arModel.setcUserId(1);//TODO 关联操作
             arModel.setDeleteNum(0);

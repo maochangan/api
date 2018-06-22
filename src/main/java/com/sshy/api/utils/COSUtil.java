@@ -9,12 +9,15 @@ import com.qcloud.cos.model.DeleteObjectRequest;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
 
 public class COSUtil {
+    static Logger logger = LoggerFactory.getLogger(COSUtil.class);
 
     public static String uploadFile(String key, File localFile) {
         COSCredentials cred = new BasicCOSCredentials("AKIDQlzHUhJ14x44sxtlT5dP5aGcpsrLrwxo", "Nhv1wLdkU7btztc8ThjeR7h6JOK5ijfU");
@@ -25,8 +28,10 @@ public class COSUtil {
         PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
         Date expiration = new Date(new Date().getTime() + 5 * 60 * 10000);
         URL url = cosclient.generatePresignedUrl(bucketName, key, expiration);
+        logger.info(""+url);
         cosclient.shutdown();
-        return url.toString();
+        String returnUrl = ConstantInterface.COS_URL + key;
+        return returnUrl;
     }
 
     public static boolean deleteFile(String key) {

@@ -67,7 +67,7 @@ public interface CompanyUserDao {
 
     ArModelManagement getARModel(Integer id);
 
-    @Update("UPDATE ar_model_management SET delete_num=0 WHERE id = #{id , jdbcType=INTEGER}")
+    @Update("UPDATE ar_model_management SET delete_num=1 WHERE id = #{id , jdbcType=INTEGER}")
     Integer removeARModel(Integer id);
 
     Integer updateArModelSerByParKey(ArModelManagement arModelManagement);
